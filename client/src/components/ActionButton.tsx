@@ -7,16 +7,27 @@ interface IActionButton {
   color: string;
   backgroundColor: string;
   borderRadius: number;
+  styles?: { [property: string]: string | number };
   action: () => void;
 }
+
+const useStyles = makeStyles({
+  button: {
+    "&:hover": {
+      opacity: 0.9,
+    },
+  },
+});
 
 const ActionButton: React.FC<IActionButton> = ({
   label,
   color,
   backgroundColor,
   borderRadius,
+  styles,
   action,
 }: IActionButton) => {
+  const classes = useStyles();
   return (
     <Fragment>
       <Button
@@ -32,9 +43,12 @@ const ActionButton: React.FC<IActionButton> = ({
           paddingBottom: 10,
           fontSize: 12,
           fontWeight: 600,
-          width: 140,
+          minWidth: 140,
+          maxWidth: 300,
+          ...styles,
         }}
         onClick={action}
+        className={classes.button}
       >
         {label}
       </Button>

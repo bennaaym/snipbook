@@ -5,6 +5,7 @@ import { customTheme } from "../common";
 
 const useStyles = makeStyles({
   root: {
+    height: "100%",
     paddingLeft: `${customTheme.pagePadding}% !important`,
     paddingRight: `${customTheme.pagePadding}% !important`,
   },

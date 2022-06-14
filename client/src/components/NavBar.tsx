@@ -12,6 +12,7 @@ const useStyles = makeStyles({
     background: customTheme.color.background,
     paddingLeft: `${customTheme.pagePadding}% !important`,
     paddingRight: `${customTheme.pagePadding}% !important`,
+    paddingTop: customTheme.pagePadding * 2,
   },
   logo: {
     textTransform: "capitalize",
