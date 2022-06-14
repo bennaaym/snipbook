@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { AppBar, Box, Toolbar, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { customTheme } from "../common";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ActionButton from "./ActionButton";
 
 const useStyles = makeStyles({
@@ -31,9 +31,15 @@ const useStyles = makeStyles({
   },
 });
 
+// list of routes where we don't want to display the Navigation bar
+const excludedRouted = ["/profile"];
+
 const NavBar = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  if (excludedRouted.includes(pathname)) return <></>;
 
   return (
     <Fragment>

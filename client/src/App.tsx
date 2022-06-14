@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { NavBar } from "./components";
-import { Home } from "./pages";
+import { Home, Profile } from "./pages";
 
 const App = () => {
   return (
@@ -8,7 +8,8 @@ const App = () => {
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<></>} />
+        <Route path="signup" element={<></>} />
+        <Route path="/profile" element={<Profile />}></Route>
       </Routes>
     </div>
   );

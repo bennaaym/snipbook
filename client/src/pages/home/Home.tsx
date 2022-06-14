@@ -34,6 +34,8 @@ const userStyles = makeStyles({
   right: {
     flex: 1,
     height: "100%",
+    justifyContent: "flex-end",
+    // alignItems: "flex-start",
   },
 
   gradient: {

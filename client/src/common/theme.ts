@@ -11,5 +11,6 @@ export const customTheme = {
     primary: "#735CFF",
     title: "#181A22",
     paragraph: "#383060",
+    pink: "#F05CF1",
   },
 };
