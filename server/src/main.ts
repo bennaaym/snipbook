@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import { ValidationPipe } from '@nestjs/common';
+import { CustomExceptionFilter } from './error/custom.exception';
 
 dotenv.config();
 
@@ -17,5 +18,6 @@ dotenv.config();
       },
     }),
   );
+  app.useGlobalFilters(new CustomExceptionFilter());
   await app.listen(process.env.PORT);
 })();

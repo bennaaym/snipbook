@@ -8,3 +8,8 @@ export interface ICreatePostBody {
   tags: string[];
   images: Image[];
 }
+export interface IUpdatePostBody {
+  title: string;
+  message: string;
+  tags: string[];
+}

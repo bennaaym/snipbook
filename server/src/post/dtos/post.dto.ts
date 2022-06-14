@@ -2,12 +2,15 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsNotEmpty,
+  IsOptional,
   IsString,
   MinLength,
   ValidateNested,
 } from 'class-validator';
 
 class Image {
+  @IsString()
+  @IsNotEmpty()
   url: string;
 }
 
@@ -23,7 +26,6 @@ export class CreatePostDto {
   message: string;
 
   @IsArray()
-  @ValidateNested({ each: true })
   @Type(() => String)
   tags: string[];
 
@@ -31,4 +33,23 @@ export class CreatePostDto {
   @ValidateNested({ each: true })
   @Type(() => Image)
   images: Image[];
+}
+
+export class UpdatePostDto {
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(10)
+  title: string;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(10)
+  message: string;
+
+  @IsOptional()
+  @IsArray()
+  @Type(() => String)
+  tags: string[];
 }
