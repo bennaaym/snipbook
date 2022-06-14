@@ -1,14 +1,25 @@
 import { Box } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import { Fragment } from "react";
-import { ProfileBar } from "../../components";
+import { PageContainer, ProfileBar } from "../../components";
 import PostForm from "../../components/profile/PostForm";
 
+const useStyles = makeStyles({
+  profileContent: {
+    paddingLeft: 340,
+    height: "100%",
+  },
+});
+
 const Profile = () => {
+  const classes = useStyles();
   return (
     <Fragment>
       <ProfileBar />
-      <Box style={{ paddingLeft: 400, paddingTop: 50 }}>
-        <PostForm />
+      <Box className={classes.profileContent}>
+        <PageContainer>
+          <PostForm />
+        </PageContainer>
       </Box>
     </Fragment>
   );
