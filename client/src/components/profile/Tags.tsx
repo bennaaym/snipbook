@@ -1,7 +1,7 @@
+import { Fragment, useState } from "react";
 import { HighlightOff } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { Dispatch, Fragment, SetStateAction, useState } from "react";
 import { customTheme } from "../../common";
 
 const useStyles = makeStyles({
@@ -43,15 +43,15 @@ const useStyles = makeStyles({
 interface IProps {
   tags: string[];
   maxTags: number;
-  setTags: Dispatch<SetStateAction<string[]>>;
+  onChange: (tags: string[]) => any;
 }
 
-const Tags: React.FC<IProps> = ({ tags, maxTags, setTags }) => {
+const Tags: React.FC<IProps> = ({ tags, maxTags, onChange }) => {
   const classes = useStyles();
   const [tag, setTag] = useState("");
   const removeTag = (tag: string) => {
     const updatedTags = tags.filter((el) => el !== tag);
-    setTags(updatedTags);
+    onChange(updatedTags);
   };
 
   const handleSubmit = (event: any) => {
@@ -59,9 +59,10 @@ const Tags: React.FC<IProps> = ({ tags, maxTags, setTags }) => {
     if (!tag) return;
     if (tags.length >= maxTags) return;
     if (tags.includes(tag)) return;
-    setTags((tags) => [...tags, tag]);
+    onChange([...tags, tag]);
+    setTag("");
   };
-
+  console.log(tags.length <= 0);
   return (
     <Fragment>
       <Box className={classes.root}>

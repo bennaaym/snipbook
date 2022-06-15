@@ -1,11 +1,11 @@
-import { CloudUpload } from "@mui/icons-material";
 import { Box, Stack, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Fragment, useState } from "react";
-import { customTheme } from "../../common";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Tags from "./Tags";
+import { customTheme } from "../../common";
+import ImageBase from "./ImageBase";
 
 const useStyles = makeStyles({
   root: {
@@ -43,24 +43,6 @@ const useStyles = makeStyles({
     columnGap: 20,
   },
 
-  uploadButton: {
-    display: "none",
-  },
-
-  customUploadButton: {
-    display: "block",
-    color: customTheme.color.background,
-    background: "#6b7280",
-
-    borderRadius: 5,
-    cursor: "pointer",
-    textAlign: "center",
-    fontSize: 16,
-    "&:hover": {
-      opacity: 0.9,
-    },
-  },
-
   submitButton: {
     color: customTheme.color.background,
     backgroundColor: customTheme.color.primary,
@@ -71,12 +53,14 @@ const useStyles = makeStyles({
     "&:hover": {
       opacity: 0.9,
     },
+    cursor: "pointer",
   },
 });
 
 const PostForm = () => {
   const classes = useStyles();
   const [tags, setTags] = useState<string[]>([]);
+  const [image, setImage] = useState<string>("");
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -94,7 +78,7 @@ const PostForm = () => {
         .required("Required"),
     }),
     onSubmit: (values) => {
-      console.log(values, tags);
+      console.log(values, tags, image);
     },
   });
 
@@ -119,7 +103,7 @@ const PostForm = () => {
                 value={formik.values.title}
               />
               {formik.errors.title && (
-                <Typography component="p" color="red">
+                <Typography component="p" color="error">
                   {formik.errors.title}
                 </Typography>
               )}
@@ -139,7 +123,7 @@ const PostForm = () => {
                 value={formik.values.description}
               ></textarea>
               {formik.errors.description && (
-                <Typography component="p" color="red">
+                <Typography component="p" color="error">
                   {formik.errors.description}
                 </Typography>
               )}
@@ -152,7 +136,11 @@ const PostForm = () => {
               >
                 add tags
               </Typography>
-              <Tags tags={tags} setTags={setTags} maxTags={3} />
+              <Tags
+                tags={tags}
+                onChange={(tags) => setTags(tags)}
+                maxTags={3}
+              />
             </Box>
             <Stack spacing={2}>
               <Typography
@@ -162,16 +150,10 @@ const PostForm = () => {
               >
                 upload image
               </Typography>
-              <label
-                htmlFor="upload-button"
-                className={classes.customUploadButton}
-              >
-                <CloudUpload sx={{ fontSize: 40 }} />
-              </label>
-              <input
-                type="file"
-                id="upload-button"
-                className={classes.uploadButton}
+              <ImageBase
+                onDone={(base64: any) => {
+                  setImage(base64);
+                }}
               />
             </Stack>
             <input

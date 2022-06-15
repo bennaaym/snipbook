@@ -9,12 +9,13 @@ import { customTheme } from "../../common";
 interface IProps {
   label: string;
   icon: JSX.Element;
+  action: () => void;
 }
 
-const ProfileBarItem: React.FC<IProps> = ({ label, icon }: IProps) => {
+const ProfileBarItem: React.FC<IProps> = ({ label, icon, action }: IProps) => {
   return (
     <ListItem disablePadding>
-      <ListItemButton>
+      <ListItemButton onClick={action}>
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText
           primary={label}
