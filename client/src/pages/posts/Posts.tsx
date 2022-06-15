@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     flexDirection: "row",
     flexWrap: "wrap",
     rowGap: 10,
-    columnGap: 30,
+    columnGap: 120,
   },
 });
 
@@ -33,6 +33,7 @@ const Posts = () => {
             return (
               <PostCard
                 key={post.id}
+                id={post.id}
                 title={post.title}
                 description={post.description}
                 likes={0}

@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 import * as API from "../../api";
-import { ICreatePostBody } from "../../api/interfaces/post";
+import { ICreatePostBody, IUpdatePostBody } from "../../api/interfaces/post";
 import { PostActionType } from "../action-types";
 import { PostAction } from "../actions/post";
 
@@ -25,6 +25,20 @@ export const createPost = (body: ICreatePostBody) => {
       dispatch({
         type: PostActionType.CREATE,
         payload: res?.data?.data?.post,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const updatePost = (id: number, body: IUpdatePostBody) => {
+  return async (dispatch: Dispatch<PostAction>) => {
+    try {
+      const res = await API.updatePost(id, body);
+      dispatch({
+        type: PostActionType.UPDATE,
+        payload: { ...res?.data?.data?.post, id },
       });
     } catch (err) {
       console.log(err);

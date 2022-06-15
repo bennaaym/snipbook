@@ -15,8 +15,14 @@ import { customTheme } from "../../common";
 import moment from "moment";
 import postImage from "../../static/images/post_image.jpg";
 import postAvatar from "../../static/images/user_avatar.jpg";
+import { useDispatch } from "react-redux";
+import { Dispatch } from "redux";
+import { ProfileActionCreators } from "../../redux/actions-creators";
+import { ProfileComponent } from "../../redux/actions/profile";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
+  id: number;
   title: string;
   description: string;
   imgUrl: string;
@@ -25,14 +31,23 @@ interface IProps {
 }
 
 const PostCard: React.FC<IProps> = ({
+  id,
   title,
   description,
   imgUrl,
   likes,
   updatedAt,
 }) => {
+  const dispatch: Dispatch<any> = useDispatch();
+  const navigate = useNavigate();
+  const handleUpdate = (id: number) => {
+    dispatch(
+      ProfileActionCreators.updateComponent(ProfileComponent.UPDATE_FORM)
+    );
+    navigate(`/profile/posts/update/${id}`);
+  };
   return (
-    <Card sx={{ minWidth: 300, maxWidth: 400 }}>
+    <Card sx={{ width: 400 }}>
       <CardHeader
         avatar={
           <Avatar aria-label="recipe">
@@ -46,7 +61,7 @@ const PostCard: React.FC<IProps> = ({
           </Avatar>
         }
         action={
-          <IconButton aria-label="settings">
+          <IconButton aria-label="settings" onClick={() => handleUpdate(id)}>
             <MoreVert />
           </IconButton>
         }

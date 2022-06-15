@@ -7,13 +7,16 @@ const reducer = (state: any = [], action: PostAction) => {
       return action.payload;
 
     case PostActionType.CREATE:
-      return [...state, action.payload];
+      return [action.payload, ...state];
 
     case PostActionType.UPDATE:
-      break;
+      const filteredPosts = state.filter(
+        (post: any) => post.id !== action.payload.id
+      );
+      return [action.payload, ...filteredPosts];
 
     case PostActionType.DELETE:
-      break;
+      return state;
 
     default:
       return state;

@@ -87,6 +87,7 @@ const Tags: React.FC<IProps> = ({ tags, maxTags, onChange }) => {
             onKeyDown={handleSubmit}
             onChange={(event) => setTag(event.target.value)}
             value={tag}
+            form="tags-form"
           />
         )}
       </Box>

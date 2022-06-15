@@ -1,15 +1,16 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { Fragment, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Tags from "./Tags";
 import { customTheme } from "../../common";
 import ImageBase from "./ImageBase";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 import { PostActionCreators } from "../../redux/actions-creators";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../../redux/reducers";
 
 const useStyles = makeStyles({
   root: {
@@ -23,6 +24,7 @@ const useStyles = makeStyles({
     width: "100%",
     display: "flex",
     flexDirection: "column",
+    maxWidth: "800px",
   },
 
   formElement: {
@@ -61,17 +63,51 @@ const useStyles = makeStyles({
   },
 });
 
-const PostForm = () => {
+interface IPostForm {
+  postId?: number;
+}
+
+const PostForm: React.FC<IPostForm> = ({ postId }) => {
   const classes = useStyles();
   const [tags, setTags] = useState<string[]>([]);
   const [image, setImage] = useState<string>("");
   const dispatch: Dispatch<any> = useDispatch();
   const navigate = useNavigate();
+  const posts = useSelector((state: RootState) => state.posts);
+
+  const post = useMemo(() => {
+    return posts.find((post: any) => post.id === postId);
+  }, [posts, postId]);
+
+  const handleSubmit = (values: any) => {
+    if (post) {
+      // update an existing post
+      dispatch(
+        PostActionCreators.updatePost(post.id, {
+          ...values,
+          tags,
+          images: image ? [{ url: image }] : [],
+        })
+      );
+      navigate("/posts");
+      return;
+    }
+
+    // create a new post
+    dispatch(
+      PostActionCreators.createPost({
+        ...values,
+        tags,
+        images: image ? [{ url: image }] : [],
+      })
+    );
+    navigate("/posts");
+  };
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      description: "",
+      title: (post?.title as string) || "",
+      description: (post?.description as string) || "",
     },
     validationSchema: yup.object({
       title: yup
@@ -84,16 +120,7 @@ const PostForm = () => {
         .min(10, "Description must be 10 characters or more")
         .required("Required"),
     }),
-    onSubmit: (values) => {
-      dispatch(
-        PostActionCreators.createPost({
-          ...values,
-          tags,
-          images: image ? [{ url: image }] : [],
-        })
-      );
-      navigate("/posts");
-    },
+    onSubmit: (values) => handleSubmit(values),
   });
 
   return (
@@ -156,20 +183,22 @@ const PostForm = () => {
                 maxTags={3}
               />
             </Box>
-            <Stack spacing={2}>
-              <Typography
-                fontSize={16}
-                fontWeight={600}
-                textTransform="capitalize"
-              >
-                upload image
-              </Typography>
-              <ImageBase
-                onDone={(base64: any) => {
-                  setImage(base64);
-                }}
-              />
-            </Stack>
+            {!post && (
+              <Stack spacing={2}>
+                <Typography
+                  fontSize={16}
+                  fontWeight={600}
+                  textTransform="capitalize"
+                >
+                  upload image
+                </Typography>
+                <ImageBase
+                  onDone={(base64: any) => {
+                    setImage(base64);
+                  }}
+                />
+              </Stack>
+            )}
             <input
               type="submit"
               value="publish"
