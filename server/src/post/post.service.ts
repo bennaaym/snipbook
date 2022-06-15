@@ -13,20 +13,53 @@ export class PostService {
         userId: true,
         title: true,
         description: true,
+        tags: true,
         updateAt: true,
-        images: {
-          select: {
-            url: true,
-          },
-          take: 1,
-        },
+        // images: {
+        //   select: {
+        //     url: true,
+        //   },
+        //   take: 1,
+        // },
       },
+      orderBy: [
+        {
+          updateAt: 'desc',
+        },
+      ],
     });
     return {
       status: 'success',
       results: allPosts.length,
       data: {
         posts: allPosts,
+      },
+    };
+  }
+
+  async getPostById(id: number) {
+    const post = await this.prismaService.post.findUnique({
+      select: {
+        id: true,
+        title: true,
+        description: true,
+      },
+      where: { id },
+    });
+
+    if (!post)
+      throw new HttpException(
+        {
+          status: 'fail',
+          description: `Invalid post id`,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+
+    return {
+      status: 'success',
+      data: {
+        post,
       },
     };
   }

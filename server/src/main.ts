@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import { ValidationPipe } from '@nestjs/common';
 import { CustomExceptionFilter } from './error/custom.exception';
+import { json } from 'express';
 
 dotenv.config();
 
@@ -10,6 +11,9 @@ dotenv.config();
   const app = await NestFactory.create(AppModule);
   app.enableCors();
   app.setGlobalPrefix('api/v1');
+
+  app.use(json({ limit: '5mb' }));
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
