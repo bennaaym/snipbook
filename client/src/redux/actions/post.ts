@@ -20,8 +20,14 @@ interface DeleteAction {
   payload: { [key: string]: any };
 }
 
+interface LikeAction {
+  type: PostActionType.LIKE;
+  payload: { [key: string]: any };
+}
+
 export type PostAction =
   | FetchAllAction
   | CreateAction
   | UpdateAction
-  | DeleteAction;
+  | DeleteAction
+  | LikeAction;

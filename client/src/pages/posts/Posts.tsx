@@ -3,7 +3,7 @@ import { makeStyles } from "@mui/styles";
 import { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
-import { PageContainer, PostCard } from "../../components";
+import { Loading, PageContainer, PostCard } from "../../components";
 import { PostActionCreators } from "../../redux/actions-creators";
 import { RootState } from "../../redux/reducers";
 
@@ -27,24 +27,28 @@ const Posts = () => {
   }, [dispatch]);
   return (
     <Fragment>
-      <PageContainer>
-        <Box className={classes.posts}>
-          {posts.map((post: any) => {
-            return (
-              <PostCard
-                key={post.id}
-                id={post.id}
-                title={post.title}
-                description={post.description}
-                tags={post.tags}
-                likes={0}
-                imgUrl={posts.images ? post.images[0]?.url : null}
-                updatedAt={post.updatedAt}
-              />
-            );
-          })}
-        </Box>
-      </PageContainer>
+      {posts.length ? (
+        <PageContainer>
+          <Box className={classes.posts}>
+            {posts.map((post: any) => {
+              return (
+                <PostCard
+                  key={post.id}
+                  id={post.id}
+                  title={post.title}
+                  description={post.description}
+                  tags={post.tags}
+                  likes={post.likeCount}
+                  imgUrl={posts.images ? post.images[0]?.url : null}
+                  updatedAt={post.updatedAt}
+                />
+              );
+            })}
+          </Box>
+        </PageContainer>
+      ) : (
+        <Loading />
+      )}
     </Fragment>
   );
 };

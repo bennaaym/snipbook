@@ -38,7 +38,7 @@ export const updatePost = (id: number, body: IUpdatePostBody) => {
       const res = await API.updatePost(id, body);
       dispatch({
         type: PostActionType.UPDATE,
-        payload: { ...res?.data?.data?.post, id },
+        payload: res?.data?.data?.post,
       });
     } catch (err) {
       console.log(err);
@@ -53,6 +53,20 @@ export const deletePost = (id: number) => {
       dispatch({
         type: PostActionType.DELETE,
         payload: { id },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const likePost = (id: number) => {
+  return async (dispatch: Dispatch<PostAction>) => {
+    try {
+      const res = await API.likePost(id);
+      dispatch({
+        type: PostActionType.LIKE,
+        payload: res?.data?.data?.post,
       });
     } catch (err) {
       console.log(err);

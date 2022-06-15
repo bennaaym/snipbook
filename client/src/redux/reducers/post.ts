@@ -10,13 +10,19 @@ const reducer = (state: any = [], action: PostAction) => {
       return [action.payload, ...state];
 
     case PostActionType.UPDATE:
-      const filteredPosts = state.filter(
+      const postsAfterUpdate = state.filter(
         (post: any) => post.id !== action.payload.id
       );
-      return [action.payload, ...filteredPosts];
+      return [action.payload, ...postsAfterUpdate];
 
     case PostActionType.DELETE:
       return state.filter((post: any) => post.id !== action.payload.id);
+
+    case PostActionType.LIKE:
+      const postsAfterLike = state.filter(
+        (post: any) => post.id !== action.payload.id
+      );
+      return [action.payload, ...postsAfterLike];
 
     default:
       return state;

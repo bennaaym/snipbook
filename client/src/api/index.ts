@@ -11,3 +11,4 @@ export const updatePost = (id: number, body: IUpdatePostBody) =>
   API.patch(`post/${id}`, body);
 
 export const deletePost = (id: number) => API.delete(`post/${id}`);
+export const likePost = (id: number) => API.patch(`post/${id}/likes`);

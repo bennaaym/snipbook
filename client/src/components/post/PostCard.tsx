@@ -46,14 +46,18 @@ const PostCard: React.FC<IProps> = ({
 }) => {
   const dispatch: Dispatch<any> = useDispatch();
   const navigate = useNavigate();
-  const handleUpdate = (id: number) => {
+  const handleUpdate = () => {
     dispatch(
       ProfileActionCreators.updateComponent(ProfileComponent.UPDATE_FORM)
     );
     navigate(`/profile/posts/update/${id}`);
   };
-  const handleDelete = (id: number) => {
+  const handleDelete = () => {
     dispatch(PostActionCreators.deletePost(id));
+  };
+
+  const handleLike = () => {
+    dispatch(PostActionCreators.likePost(id));
   };
   return (
     <Card sx={{ width: 400 }}>
@@ -71,10 +75,10 @@ const PostCard: React.FC<IProps> = ({
         }
         action={
           <Box>
-            <IconButton aria-label="settings" onClick={() => handleDelete(id)}>
+            <IconButton aria-label="settings" onClick={handleDelete}>
               <Delete />
             </IconButton>
-            <IconButton aria-label="settings" onClick={() => handleUpdate(id)}>
+            <IconButton aria-label="settings" onClick={handleUpdate}>
               <MoreVert />
             </IconButton>
           </Box>
@@ -132,7 +136,7 @@ const PostCard: React.FC<IProps> = ({
         style={{ display: "flex", justifyContent: "space-between" }}
       >
         <Box>
-          <IconButton aria-label="add to favorites">
+          <IconButton aria-label="add to favorites" onClick={handleLike}>
             <Favorite />
           </IconButton>
           <Typography
