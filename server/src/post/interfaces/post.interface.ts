@@ -4,12 +4,12 @@ interface Image {
 
 export interface ICreatePostBody {
   title: string;
-  message: string;
+  description: string;
   tags: string[];
   images: Image[];
 }
 export interface IUpdatePostBody {
   title: string;
-  message: string;
+  description: string;
   tags: string[];
 }

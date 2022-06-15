@@ -13,7 +13,7 @@ datasource db {
 model Post {
   id                      Int @id @default(autoincrement())
   title                   String
-  message                 String
+  description             String
   tags                    String[]
   images                  Image[]
   likeCount               Int @default(0)
@@ -33,7 +33,7 @@ model Image {
 model User {
   id                      Int @id @default(autoincrement())
   name                    String
-  email                   String
+  email                   String  @unique
   password                String
   createdAt               DateTime  @default(now())
   updatedAt               DateTime  @default(now())

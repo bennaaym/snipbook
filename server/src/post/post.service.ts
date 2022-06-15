@@ -12,7 +12,7 @@ export class PostService {
         id: true,
         userId: true,
         title: true,
-        message: true,
+        description: true,
         updateAt: true,
         images: {
           select: {
@@ -31,12 +31,12 @@ export class PostService {
     };
   }
 
-  async createPost({ title, message, tags, images }: ICreatePostBody) {
+  async createPost({ title, description, tags, images }: ICreatePostBody) {
     // create a new record in the Post table
     const newPost = await this.prismaService.post.create({
       data: {
         title,
-        message,
+        description,
         tags,
         userId: 1,
       },
@@ -60,7 +60,10 @@ export class PostService {
     };
   }
 
-  async updatePostById(id: number, { title, message, tags }: IUpdatePostBody) {
+  async updatePostById(
+    id: number,
+    { title, description, tags }: IUpdatePostBody,
+  ) {
     // check if there is a record in Post table with the passed id
     const post = await this.prismaService.post.findUnique({ where: { id } });
 
@@ -68,7 +71,7 @@ export class PostService {
       throw new HttpException(
         {
           status: 'fail',
-          message: `Invalid post id`,
+          description: `Invalid post id`,
         },
         HttpStatus.NOT_FOUND,
       );
@@ -80,7 +83,7 @@ export class PostService {
       },
       data: {
         title,
-        message,
+        description,
         tags,
         updateAt: new Date(Date.now()),
       },

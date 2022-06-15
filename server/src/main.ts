@@ -8,6 +8,7 @@ dotenv.config();
 
 (async () => {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(
     new ValidationPipe({
@@ -18,6 +19,6 @@ dotenv.config();
       },
     }),
   );
-  app.useGlobalFilters(new CustomExceptionFilter());
+  // app.useGlobalFilters(new CustomExceptionFilter());
   await app.listen(process.env.PORT);
 })();

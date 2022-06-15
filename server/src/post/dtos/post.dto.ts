@@ -23,7 +23,7 @@ export class CreatePostDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(10)
-  message: string;
+  description: string;
 
   @IsArray()
   @Type(() => String)
@@ -46,7 +46,7 @@ export class UpdatePostDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(10)
-  message: string;
+  description: string;
 
   @IsOptional()
   @IsArray()
