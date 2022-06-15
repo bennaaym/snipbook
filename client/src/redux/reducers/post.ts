@@ -16,7 +16,7 @@ const reducer = (state: any = [], action: PostAction) => {
       return [action.payload, ...filteredPosts];
 
     case PostActionType.DELETE:
-      return state;
+      return state.filter((post: any) => post.id !== action.payload.id);
 
     default:
       return state;

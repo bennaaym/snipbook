@@ -9,15 +9,19 @@ import {
   IconButton,
   Typography,
   Box,
+  Chip,
 } from "@mui/material";
-import { Favorite, Share, MoreVert } from "@mui/icons-material";
+import { Favorite, Share, MoreVert, Delete } from "@mui/icons-material";
 import { customTheme } from "../../common";
 import moment from "moment";
 import postImage from "../../static/images/post_image.jpg";
 import postAvatar from "../../static/images/user_avatar.jpg";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
-import { ProfileActionCreators } from "../../redux/actions-creators";
+import {
+  PostActionCreators,
+  ProfileActionCreators,
+} from "../../redux/actions-creators";
 import { ProfileComponent } from "../../redux/actions/profile";
 import { useNavigate } from "react-router-dom";
 
@@ -25,6 +29,7 @@ interface IProps {
   id: number;
   title: string;
   description: string;
+  tags: string[];
   imgUrl: string;
   likes: number;
   updatedAt: Date;
@@ -34,6 +39,7 @@ const PostCard: React.FC<IProps> = ({
   id,
   title,
   description,
+  tags,
   imgUrl,
   likes,
   updatedAt,
@@ -45,6 +51,9 @@ const PostCard: React.FC<IProps> = ({
       ProfileActionCreators.updateComponent(ProfileComponent.UPDATE_FORM)
     );
     navigate(`/profile/posts/update/${id}`);
+  };
+  const handleDelete = (id: number) => {
+    dispatch(PostActionCreators.deletePost(id));
   };
   return (
     <Card sx={{ width: 400 }}>
@@ -61,9 +70,14 @@ const PostCard: React.FC<IProps> = ({
           </Avatar>
         }
         action={
-          <IconButton aria-label="settings" onClick={() => handleUpdate(id)}>
-            <MoreVert />
-          </IconButton>
+          <Box>
+            <IconButton aria-label="settings" onClick={() => handleDelete(id)}>
+              <Delete />
+            </IconButton>
+            <IconButton aria-label="settings" onClick={() => handleUpdate(id)}>
+              <MoreVert />
+            </IconButton>
+          </Box>
         }
         title={
           <Typography
@@ -88,6 +102,31 @@ const PostCard: React.FC<IProps> = ({
           {description}
         </Typography>
       </CardContent>
+      {tags && (
+        <CardContent
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            columnGap: 10,
+          }}
+        >
+          {tags.map((tag) => {
+            return (
+              <Chip
+                key={`${id}-${tag}`}
+                label={`#${tag}`}
+                style={{
+                  background: customTheme.color.primary,
+                  color: customTheme.color.background,
+                  textTransform: "capitalize",
+                  cursor: "pointer",
+                }}
+                onClick={() => {}}
+              />
+            );
+          })}
+        </CardContent>
+      )}
       <CardActions
         disableSpacing
         style={{ display: "flex", justifyContent: "space-between" }}

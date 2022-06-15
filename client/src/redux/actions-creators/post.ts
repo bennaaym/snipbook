@@ -45,3 +45,17 @@ export const updatePost = (id: number, body: IUpdatePostBody) => {
     }
   };
 };
+
+export const deletePost = (id: number) => {
+  return async (dispatch: Dispatch<PostAction>) => {
+    try {
+      await API.deletePost(id);
+      dispatch({
+        type: PostActionType.DELETE,
+        payload: { id },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};

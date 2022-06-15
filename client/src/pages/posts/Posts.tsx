@@ -36,6 +36,7 @@ const Posts = () => {
                 id={post.id}
                 title={post.title}
                 description={post.description}
+                tags={post.tags}
                 likes={0}
                 imgUrl={posts.images ? post.images[0]?.url : null}
                 updatedAt={post.updatedAt}
