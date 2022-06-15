@@ -14,7 +14,9 @@ export class PostService {
         title: true,
         description: true,
         tags: true,
+        likeCount: true,
         updateAt: true,
+
         // images: {
         //   select: {
         //     url: true,
@@ -41,8 +43,12 @@ export class PostService {
     const post = await this.prismaService.post.findUnique({
       select: {
         id: true,
+        userId: true,
         title: true,
         description: true,
+        tags: true,
+        likeCount: true,
+        updateAt: true,
       },
       where: { id },
     });
@@ -117,8 +123,39 @@ export class PostService {
       data: {
         title,
         description,
-        tags,
+        tags: tags.length ? tags : post.tags,
         updateAt: new Date(Date.now()),
+      },
+    });
+
+    return {
+      status: 'success',
+      data: {
+        post: updatedPost,
+      },
+    };
+  }
+
+  async updatePostLikes(id: number) {
+    // check if there is a record in Post table with the passed id
+    const post = await this.prismaService.post.findUnique({ where: { id } });
+
+    if (!post)
+      throw new HttpException(
+        {
+          status: 'fail',
+          description: `Invalid post id`,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+
+    // update the record
+    const updatedPost = await this.prismaService.post.update({
+      where: {
+        id,
+      },
+      data: {
+        likeCount: post.likeCount + 1,
       },
     });
 

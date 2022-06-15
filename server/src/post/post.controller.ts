@@ -38,6 +38,11 @@ export class PostController {
     return this.postService.updatePostById(id, body);
   }
 
+  @Patch(':id/likes')
+  updatePostLikes(@Param('id') id: number) {
+    return this.postService.updatePostLikes(id);
+  }
+
   @Delete(':id')
   deletePostById(@Param('id', ParseIntPipe) id: number) {
     return this.postService.deletePostById(id);
