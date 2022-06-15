@@ -8,6 +8,7 @@ const useStyles = makeStyles({
     height: "100%",
     paddingLeft: `${customTheme.pagePadding}% !important`,
     paddingRight: `${customTheme.pagePadding}% !important`,
+    paddingTop: customTheme.pagePadding * 5,
   },
 });
 

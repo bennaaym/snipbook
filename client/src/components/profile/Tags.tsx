@@ -62,7 +62,6 @@ const Tags: React.FC<IProps> = ({ tags, maxTags, onChange }) => {
     onChange([...tags, tag]);
     setTag("");
   };
-  console.log(tags.length <= 0);
   return (
     <Fragment>
       <Box className={classes.root}>

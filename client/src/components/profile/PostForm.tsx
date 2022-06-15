@@ -6,6 +6,10 @@ import * as yup from "yup";
 import Tags from "./Tags";
 import { customTheme } from "../../common";
 import ImageBase from "./ImageBase";
+import { useDispatch } from "react-redux";
+import { Dispatch } from "redux";
+import { PostActionCreators } from "../../redux/actions-creators";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
@@ -61,6 +65,9 @@ const PostForm = () => {
   const classes = useStyles();
   const [tags, setTags] = useState<string[]>([]);
   const [image, setImage] = useState<string>("");
+  const dispatch: Dispatch<any> = useDispatch();
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -78,7 +85,14 @@ const PostForm = () => {
         .required("Required"),
     }),
     onSubmit: (values) => {
-      console.log(values, tags, image);
+      dispatch(
+        PostActionCreators.createPost({
+          ...values,
+          tags,
+          images: image ? [{ url: image }] : [],
+        })
+      );
+      navigate("/posts");
     },
   });
 

@@ -7,7 +7,7 @@ const reducer = (state: any = [], action: PostAction) => {
       return action.payload;
 
     case PostActionType.CREATE:
-      break;
+      return [...state, action.payload];
 
     case PostActionType.UPDATE:
       break;

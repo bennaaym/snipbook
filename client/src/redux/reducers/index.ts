@@ -1,9 +1,9 @@
 import { combineReducers } from "redux";
-import post from "./post";
+import posts from "./post";
 import profile from "./profile";
 
 const reducers = combineReducers({
-  post,
+  posts,
   profile,
 });
 
