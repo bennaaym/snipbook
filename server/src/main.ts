@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 import { ValidationPipe } from '@nestjs/common';
 import { CustomExceptionFilter } from './error/custom.exception';
 import { json } from 'express';
-
+import * as cookieParser from 'cookie-parser';
 dotenv.config();
 
 (async () => {
@@ -12,6 +12,7 @@ dotenv.config();
   app.enableCors();
   app.setGlobalPrefix('api/v1');
 
+  app.use(cookieParser());
   app.use(json({ limit: '5mb' }));
 
   app.useGlobalPipes(
