@@ -9,12 +9,11 @@ interface IUser {
 const reducer = (state: IUser = {}, action: AuthAction) => {
   switch (action.type) {
     case AuthActionType.SIGN_UP:
-      console.log(action.payload);
-      return state;
+      return action.payload;
 
     case AuthActionType.SIGN_IN:
       console.log(action.payload);
-      return state;
+      return action.payload;
 
     default:
       return state;
