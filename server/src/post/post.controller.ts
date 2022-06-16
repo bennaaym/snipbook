@@ -7,7 +7,10 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { User } from 'src/auth/decorators/user.decorator';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { CreatePostDto, UpdatePostDto } from './dtos/post.dto';
 import { PostService } from './post.service';
 
@@ -26,25 +29,39 @@ export class PostController {
   }
 
   @Post()
-  createPost(@Body() body: CreatePostDto) {
-    return this.postService.createPost(body);
+  @UseGuards(AuthGuard)
+  createPost(
+    @Body() body: CreatePostDto,
+    @User() { id: userId }: { id: number },
+  ) {
+    return this.postService.createPost(body, userId);
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
   updatePostById(
     @Param('id', ParseIntPipe) id: number,
     @Body() body: UpdatePostDto,
+    @User() { id: userId }: { id: number },
   ) {
-    return this.postService.updatePostById(id, body);
+    return this.postService.updatePostById(id, body, userId);
   }
 
   @Patch(':id/likes')
-  updatePostLikes(@Param('id') id: number) {
-    return this.postService.updatePostLikes(id);
+  @UseGuards(AuthGuard)
+  updatePostLikes(
+    @Param('id') id: number,
+    @User() { id: userId }: { id: number },
+  ) {
+    return this.postService.updatePostLikes(id, userId);
   }
 
   @Delete(':id')
-  deletePostById(@Param('id', ParseIntPipe) id: number) {
-    return this.postService.deletePostById(id);
+  @UseGuards(AuthGuard)
+  deletePostById(
+    @Param('id', ParseIntPipe) id: number,
+    @User() { id: userId }: { id: number },
+  ) {
+    return this.postService.deletePostById(id, userId);
   }
 }

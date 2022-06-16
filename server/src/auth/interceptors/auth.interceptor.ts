@@ -15,11 +15,12 @@ export class AuthInterceptor implements NestInterceptor {
       map((data) => {
         if (data?.token) {
           const response: Response = context.switchToHttp().getResponse();
-          response.cookie('jwt', data.token, {
+          const cookieConfig = {
             expires: new Date(Date.now() + 3 * 24 * 3600 * 1000),
-            secure: true,
+            secure: process.env.NODE_DEV === 'production',
             httpOnly: true,
-          });
+          };
+          response.cookie('jwt', data.token, cookieConfig);
         }
         return data;
       }),

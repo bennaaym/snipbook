@@ -5,11 +5,15 @@ import { ValidationPipe } from '@nestjs/common';
 import { CustomExceptionFilter } from './error/custom.exception';
 import { json } from 'express';
 import * as cookieParser from 'cookie-parser';
+import { UserInterceptor } from './auth/interceptors/user.interceptor';
 dotenv.config();
 
 (async () => {
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  app.enableCors({
+    origin: true,
+    credentials: true,
+  });
   app.setGlobalPrefix('api/v1');
 
   app.use(cookieParser());
@@ -25,5 +29,6 @@ dotenv.config();
     }),
   );
   // app.useGlobalFilters(new CustomExceptionFilter());
+  app.useGlobalInterceptors(new UserInterceptor());
   await app.listen(process.env.PORT);
 })();

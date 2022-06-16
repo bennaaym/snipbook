@@ -79,7 +79,10 @@ export class AuthService {
       status: 'success',
       token,
       data: {
-        user,
+        user: {
+          id: user.id,
+          name: user.name,
+        },
       },
     };
   }

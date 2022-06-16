@@ -70,14 +70,17 @@ export class PostService {
     };
   }
 
-  async createPost({ title, description, tags, images }: ICreatePostBody) {
+  async createPost(
+    { title, description, tags, images }: ICreatePostBody,
+    userId: number,
+  ) {
     // create a new record in the Post table
     const newPost = await this.prismaService.post.create({
       data: {
         title,
         description,
         tags,
-        userId: 1,
+        userId,
       },
     });
 
@@ -102,6 +105,7 @@ export class PostService {
   async updatePostById(
     id: number,
     { title, description, tags }: IUpdatePostBody,
+    userId: number,
   ) {
     // check if there is a record in Post table with the passed id
     const post = await this.prismaService.post.findUnique({ where: { id } });
@@ -114,6 +118,17 @@ export class PostService {
         },
         HttpStatus.NOT_FOUND,
       );
+
+    // check if the user owns the post
+    if (post.userId !== userId) {
+      throw new HttpException(
+        {
+          status: 'fail',
+          message: 'Unauthenticated User',
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
 
     // update the record
     const updatedPost = await this.prismaService.post.update({
@@ -136,7 +151,7 @@ export class PostService {
     };
   }
 
-  async updatePostLikes(id: number) {
+  async updatePostLikes(id: number, userId: number) {
     // check if there is a record in Post table with the passed id
     const post = await this.prismaService.post.findUnique({ where: { id } });
 
@@ -149,8 +164,28 @@ export class PostService {
         HttpStatus.NOT_FOUND,
       );
 
+    // check if the user owns the post
+    if (post.userId !== userId) {
+      throw new HttpException(
+        {
+          status: 'fail',
+          message: 'Unauthenticated User',
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
     // update the record
     const updatedPost = await this.prismaService.post.update({
+      select: {
+        id: true,
+        userId: true,
+        title: true,
+        description: true,
+        tags: true,
+        likeCount: true,
+        updateAt: true,
+      },
       where: {
         id,
       },
@@ -167,7 +202,7 @@ export class PostService {
     };
   }
 
-  async deletePostById(id: number) {
+  async deletePostById(id: number, userId: number) {
     // check if there is a record in Post table with the passed id
     const post = await this.prismaService.post.findUnique({
       where: { id },
@@ -181,6 +216,17 @@ export class PostService {
         },
         HttpStatus.NOT_FOUND,
       );
+
+    // check if the user owns the post
+    if (post.userId !== userId) {
+      throw new HttpException(
+        {
+          status: 'fail',
+          message: 'Unauthenticated User',
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
 
     // cascade delete all the images related to the post
     await this.prismaService.image.deleteMany({
