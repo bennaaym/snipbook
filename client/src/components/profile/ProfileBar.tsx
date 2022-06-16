@@ -13,10 +13,7 @@ import { AddBox, Favorite, RemoveRedEye } from "@mui/icons-material";
 import userAvatar from "../../static/images/user_avatar.jpg";
 import { customTheme } from "../../common";
 import ProfileBarItem from "./ProfileBarItem";
-import { Dispatch } from "redux";
-import { useDispatch } from "react-redux";
-import { ProfileActionCreators } from "../../redux/actions-creators";
-import { ProfileComponent } from "../../redux/actions/profile";
+import { useNavigate } from "react-router-dom";
 
 const DRAWER_WIDTH = 340;
 
@@ -68,7 +65,7 @@ const useStyles = makeStyles({
 
 const ProfileBar = () => {
   const classes = useStyles();
-  const dispatch: Dispatch<any> = useDispatch();
+  const navigate = useNavigate();
 
   return (
     <Box>
@@ -144,11 +141,7 @@ const ProfileBar = () => {
               label="new post"
               icon={<AddBox sx={{ color: customTheme.color.paragraph }} />}
               action={() => {
-                dispatch(
-                  ProfileActionCreators.updateComponent(
-                    ProfileComponent.CREATE_FORM
-                  )
-                );
+                navigate("/profile/post/create");
               }}
             />
           </List>

@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { NavBar } from "./components";
+import PostForm from "./components/profile/PostForm";
 import { Home, Posts, Profile } from "./pages";
 
 const App = () => {
@@ -9,10 +10,25 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="signup" element={<></>} />
-        <Route path="/profile" element={<Profile />}>
-          <Route path="/profile/posts/update/:id" element={<Profile />} />
+        <Route path="profile">
+          <Route
+            path="post/create"
+            element={
+              <Profile>
+                <PostForm />
+              </Profile>
+            }
+          />
+          <Route
+            path="post/update/:id"
+            element={
+              <Profile>
+                <PostForm />
+              </Profile>
+            }
+          />
         </Route>
-        <Route path="/posts" element={<Posts />} />
+        <Route path="posts" element={<Posts />} />
       </Routes>
     </div>
   );

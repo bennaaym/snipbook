@@ -9,7 +9,7 @@ import ImageBase from "./ImageBase";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 import { PostActionCreators } from "../../redux/actions-creators";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { RootState } from "../../redux/reducers";
 
 const useStyles = makeStyles({
@@ -17,7 +17,7 @@ const useStyles = makeStyles({
     height: "100%",
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
+    marginTop: 100,
   },
 
   form: {
@@ -63,21 +63,19 @@ const useStyles = makeStyles({
   },
 });
 
-interface IPostForm {
-  postId?: number;
-}
-
-const PostForm: React.FC<IPostForm> = ({ postId }) => {
+const PostForm = () => {
   const classes = useStyles();
   const [tags, setTags] = useState<string[]>([]);
   const [image, setImage] = useState<string>("");
-  const dispatch: Dispatch<any> = useDispatch();
-  const navigate = useNavigate();
   const posts = useSelector((state: RootState) => state.posts);
+  const { id } = useParams();
 
   const post = useMemo(() => {
-    return posts.find((post: any) => post.id === postId);
-  }, [posts, postId]);
+    return posts.find((post: any) => `${post.id}` === id);
+  }, [posts, id]);
+
+  const dispatch: Dispatch<any> = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = (values: any) => {
     if (post) {

@@ -18,11 +18,7 @@ import postImage from "../../static/images/post_image.jpg";
 import postAvatar from "../../static/images/user_avatar.jpg";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
-import {
-  PostActionCreators,
-  ProfileActionCreators,
-} from "../../redux/actions-creators";
-import { ProfileComponent } from "../../redux/actions/profile";
+import { PostActionCreators } from "../../redux/actions-creators";
 import { useNavigate } from "react-router-dom";
 
 interface IProps {
@@ -47,10 +43,7 @@ const PostCard: React.FC<IProps> = ({
   const dispatch: Dispatch<any> = useDispatch();
   const navigate = useNavigate();
   const handleUpdate = () => {
-    dispatch(
-      ProfileActionCreators.updateComponent(ProfileComponent.UPDATE_FORM)
-    );
-    navigate(`/profile/posts/update/${id}`);
+    navigate(`/profile/post/update/${id}`);
   };
   const handleDelete = () => {
     dispatch(PostActionCreators.deletePost(id));
