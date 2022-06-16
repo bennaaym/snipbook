@@ -4,7 +4,7 @@ import { PostAction } from "../actions/post";
 const reducer = (state: any = [], action: PostAction) => {
   switch (action.type) {
     case PostActionType.FETCH_ALL:
-      return action.payload;
+      return [...action.payload];
 
     case PostActionType.CREATE:
       return [action.payload, ...state];

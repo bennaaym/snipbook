@@ -1,23 +1,33 @@
 import { PostActionType } from "../action-types";
 
+interface IPost {
+  id: number;
+  userId: number;
+  title: string;
+  description: string;
+  tags: string[];
+  likeCount: number;
+  updateAt: Date;
+}
+
 interface FetchAllAction {
   type: PostActionType.FETCH_ALL;
-  payload: any[];
+  payload: IPost[];
 }
 
 interface CreateAction {
   type: PostActionType.CREATE;
-  payload: { [key: string]: any };
+  payload: IPost;
 }
 
 interface UpdateAction {
   type: PostActionType.UPDATE;
-  payload: { [key: string]: any };
+  payload: IPost;
 }
 
 interface DeleteAction {
   type: PostActionType.DELETE;
-  payload: { [key: string]: any };
+  payload: { id: number };
 }
 
 interface LikeAction {

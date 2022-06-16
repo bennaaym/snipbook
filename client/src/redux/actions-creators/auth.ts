@@ -1,8 +1,8 @@
 import { Dispatch } from "redux";
+import { ISignInBody, ISignUpBody } from "../../api/interfaces/auth";
 import { AuthActionType } from "../action-types";
-import { ISignIn, ISignUp } from "../actions/auth";
 
-export const signup = (body: ISignUp) => {
+export const signup = (body: ISignUpBody) => {
   return (dispatch: Dispatch) => {
     try {
       dispatch({
@@ -15,7 +15,7 @@ export const signup = (body: ISignUp) => {
   };
 };
 
-export const signin = (body: ISignIn) => {
+export const signin = (body: ISignInBody) => {
   return (dispatch: Dispatch) => {
     try {
       dispatch({

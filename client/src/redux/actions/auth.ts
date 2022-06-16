@@ -1,24 +1,21 @@
 import { AuthActionType } from "../action-types";
 
-export interface ISignUp {
-  name: string;
-  email: string;
-  password: string;
-}
-
-export interface ISignIn {
-  email: string;
-  password: string;
+export interface IAuthPayload {
+  token: string;
+  user: {
+    id: number;
+    name: string;
+  };
 }
 
 interface SignUpAction {
   type: AuthActionType.SIGN_UP;
-  payload: ISignUp;
+  payload: IAuthPayload;
 }
 
 interface SignInAction {
   type: AuthActionType.SIGN_IN;
-  payload: ISignIn;
+  payload: IAuthPayload;
 }
 
 export type AuthAction = SignUpAction | SignInAction;
