@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { NavBar } from "./components";
 import PostForm from "./components/profile/PostForm";
-import { Home, Posts, Profile } from "./pages";
+import { Home, Posts, Profile, SignIn, SignUp } from "./pages";
 
 const App = () => {
   return (
@@ -9,7 +9,8 @@ const App = () => {
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="signup" element={<></>} />
+        <Route path="signup" element={<SignUp />} />
+        <Route path="signin" element={<SignIn />} />
         <Route path="profile">
           <Route
             path="post/create"
