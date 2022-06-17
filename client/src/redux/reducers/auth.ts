@@ -7,15 +7,13 @@ const reducer = (
 ) => {
   switch (action.type) {
     case AuthActionType.SIGN_UP:
-      console.log(action.payload);
       return action.payload;
 
     case AuthActionType.SIGN_IN:
-      console.log(action.payload);
       return action.payload;
 
     default:
-      return null;
+      return state;
   }
 };
 

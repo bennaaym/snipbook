@@ -6,11 +6,11 @@ import * as yup from "yup";
 import Tags from "./Tags";
 import { customTheme } from "../../common";
 import ImageBase from "./ImageBase";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 import { PostActionCreators } from "../../redux/actions-creators";
 import { useNavigate, useParams } from "react-router-dom";
-import { RootState } from "../../redux/reducers";
+import { usePosts } from "../../hooks";
 
 const useStyles = makeStyles({
   root: {
@@ -67,7 +67,7 @@ const PostForm = () => {
   const classes = useStyles();
   const [tags, setTags] = useState<string[]>([]);
   const [image, setImage] = useState<string>("");
-  const posts = useSelector((state: RootState) => state.posts);
+  const posts = usePosts();
   const { id } = useParams();
 
   const post = useMemo(() => {
@@ -87,18 +87,16 @@ const PostForm = () => {
           images: image ? [{ url: image }] : [],
         })
       );
-      navigate("/posts");
-      return;
+    } else {
+      // create a new post
+      dispatch(
+        PostActionCreators.createPost({
+          ...values,
+          tags,
+          images: image ? [{ url: image }] : [],
+        })
+      );
     }
-
-    // create a new post
-    dispatch(
-      PostActionCreators.createPost({
-        ...values,
-        tags,
-        images: image ? [{ url: image }] : [],
-      })
-    );
     navigate("/posts");
   };
 

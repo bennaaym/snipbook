@@ -1,7 +1,7 @@
 import { PostActionType } from "../action-types";
-import { PostAction } from "../actions/post";
+import { IPost, PostAction } from "../actions/post";
 
-const reducer = (state: any = [], action: PostAction) => {
+const reducer = (state: IPost[] = [], action: PostAction) => {
   switch (action.type) {
     case PostActionType.FETCH_ALL:
       return [...action.payload];

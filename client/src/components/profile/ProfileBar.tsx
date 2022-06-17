@@ -9,7 +9,7 @@ import {
   Stack,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { AddBox, Favorite, RemoveRedEye } from "@mui/icons-material";
+import { AddBox, ThumbUpAlt, Visibility } from "@mui/icons-material";
 import userAvatar from "../../static/images/user_avatar.jpg";
 import { customTheme } from "../../common";
 import ProfileBarItem from "./ProfileBarItem";
@@ -125,14 +125,16 @@ const ProfileBar: React.FC<IProps> = ({ name }: IProps) => {
 
           <Box className={classes.statsContainer}>
             <Box className={classes.stats}>
-              <Favorite
-                sx={{ color: customTheme.color.paragraph, fontSize: 40 }}
+              <ThumbUpAlt
+                fontSize="medium"
+                sx={{ color: customTheme.color.paragraph }}
               />
               <Typography>Likes 0</Typography>
             </Box>
             <Box className={classes.stats}>
-              <RemoveRedEye
-                sx={{ color: customTheme.color.paragraph, fontSize: 40 }}
+              <Visibility
+                fontSize="medium"
+                sx={{ color: customTheme.color.paragraph }}
               />
               <Typography>Views 0</Typography>
             </Box>

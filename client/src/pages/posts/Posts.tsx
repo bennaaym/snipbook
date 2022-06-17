@@ -1,11 +1,11 @@
 import { Box } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Fragment, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 import { Loading, PageContainer, PostCard } from "../../components";
+import { useAuth, usePosts } from "../../hooks";
 import { PostActionCreators } from "../../redux/actions-creators";
-import { RootState } from "../../redux/reducers";
 
 const useStyles = makeStyles({
   posts: {
@@ -19,12 +19,13 @@ const useStyles = makeStyles({
 
 const Posts = () => {
   const classes = useStyles();
-  const { posts } = useSelector((state: RootState) => state);
-  const dispatch: Dispatch<any> = useDispatch();
+  const auth = useAuth();
+  const posts = usePosts();
 
+  const dispatch: Dispatch<any> = useDispatch();
   useEffect(() => {
     dispatch(PostActionCreators.getAllPosts());
-  }, [dispatch]);
+  }, [auth, dispatch]);
   return (
     <Fragment>
       {posts.length ? (
@@ -35,11 +36,12 @@ const Posts = () => {
                 <PostCard
                   key={post.id}
                   id={post.id}
+                  userId={post.userId}
                   title={post.title}
                   description={post.description}
                   tags={post.tags}
                   likes={post.likeCount}
-                  imgUrl={posts.images ? post.images[0]?.url : null}
+                  imgUrl={post.images ? post.images[0]?.url : null}
                   updatedAt={post.updatedAt}
                 />
               );

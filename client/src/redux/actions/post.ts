@@ -1,6 +1,6 @@
 import { PostActionType } from "../action-types";
 
-interface IPost {
+export interface IPost {
   id: number;
   userId: number;
   title: string;

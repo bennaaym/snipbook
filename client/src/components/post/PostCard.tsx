@@ -20,9 +20,11 @@ import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 import { PostActionCreators } from "../../redux/actions-creators";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks";
 
 interface IProps {
   id: number;
+  userId: number;
   title: string;
   description: string;
   tags: string[];
@@ -33,6 +35,7 @@ interface IProps {
 
 const PostCard: React.FC<IProps> = ({
   id,
+  userId,
   title,
   description,
   tags,
@@ -42,6 +45,7 @@ const PostCard: React.FC<IProps> = ({
 }) => {
   const dispatch: Dispatch<any> = useDispatch();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const handleUpdate = () => {
     navigate(`/profile/post/update/${id}`);
   };
@@ -50,8 +54,13 @@ const PostCard: React.FC<IProps> = ({
   };
 
   const handleLike = () => {
+    if (!user?.id) {
+      navigate("/signin");
+      return;
+    }
     dispatch(PostActionCreators.likePost(id));
   };
+
   return (
     <Card sx={{ width: 400 }}>
       <CardHeader
@@ -67,14 +76,16 @@ const PostCard: React.FC<IProps> = ({
           </Avatar>
         }
         action={
-          <Box>
-            <IconButton aria-label="settings" onClick={handleDelete}>
-              <Delete />
-            </IconButton>
-            <IconButton aria-label="settings" onClick={handleUpdate}>
-              <MoreVert />
-            </IconButton>
-          </Box>
+          user?.id === userId ? (
+            <Box>
+              <IconButton aria-label="settings" onClick={handleDelete}>
+                <Delete />
+              </IconButton>
+              <IconButton aria-label="settings" onClick={handleUpdate}>
+                <MoreVert />
+              </IconButton>
+            </Box>
+          ) : null
         }
         title={
           <Typography

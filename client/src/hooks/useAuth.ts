@@ -3,6 +3,6 @@ import { IAuthPayload } from "../redux/actions/auth";
 import { RootState } from "../redux/reducers";
 
 export const useAuth = (): IAuthPayload => {
-  const auth = useSelector((state: RootState) => state.auth);
+  const auth = useSelector((state: RootState) => state.auth) as IAuthPayload;
   return auth;
 };

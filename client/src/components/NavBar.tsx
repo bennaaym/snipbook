@@ -1,9 +1,22 @@
-import React, { Fragment } from "react";
-import { AppBar, Box, Toolbar, Typography } from "@mui/material";
+import { Fragment, useState, MouseEvent } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Toolbar,
+  Typography,
+  Menu,
+  MenuItem,
+  Button,
+  ListItemIcon,
+} from "@mui/material";
+import { AccountBox, AccountCircle, Logout } from "@mui/icons-material";
+import ActionButton from "./ActionButton";
 import { makeStyles } from "@mui/styles";
 import { customTheme } from "../common";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import ActionButton from "./ActionButton";
+import { useAuth } from "../hooks";
+import userAvatar from "../static/images/user_avatar.jpg";
 
 const useStyles = makeStyles({
   toolBar: {
@@ -34,10 +47,58 @@ const useStyles = makeStyles({
 // list of routes where we don't want to display the Navigation bar
 const excludedRouted = ["/profile"];
 
+const NavMenu = () => {
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  return (
+    <Box>
+      <Button onClick={handleClick}>
+        <Avatar alt="user_avatar" src={userAvatar} />
+      </Button>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        disableScrollLock={true}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <Link to="/profile/posts" className={classes.link}>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon>
+              <AccountBox fontSize="small" />
+            </ListItemIcon>
+            Profile
+          </MenuItem>
+        </Link>
+
+        <Link to="/profile/posts" className={classes.link}>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon>
+              <Logout fontSize="small" />
+            </ListItemIcon>
+            Logout
+          </MenuItem>
+        </Link>
+      </Menu>
+    </Box>
+  );
+};
+
 const NavBar = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { user } = useAuth();
 
   if (excludedRouted.includes(pathname)) return <></>;
 
@@ -66,13 +127,17 @@ const NavBar = () => {
               </Link>
             </li>
             <li>
-              <ActionButton
-                label={"sign up"}
-                color={customTheme.color.background}
-                backgroundColor={customTheme.color.primary}
-                borderRadius={customTheme.borderRadius.md}
-                action={() => navigate("/signup")}
-              />
+              {!user ? (
+                <ActionButton
+                  label={"sign in"}
+                  color={customTheme.color.background}
+                  backgroundColor={customTheme.color.primary}
+                  borderRadius={customTheme.borderRadius.md}
+                  action={() => navigate("/signin")}
+                />
+              ) : (
+                <NavMenu />
+              )}
             </li>
           </ul>
         </Toolbar>
