@@ -1,14 +1,13 @@
 import { AuthActionType } from "../action-types";
-import { AuthAction } from "../actions/auth";
+import { AuthAction, IAuthPayload } from "../actions/auth";
 
-interface IUser {
-  id?: string;
-  name?: string;
-}
-
-const reducer = (state: IUser = {}, action: AuthAction) => {
+const reducer = (
+  state: IAuthPayload = { token: undefined, user: undefined },
+  action: AuthAction
+) => {
   switch (action.type) {
     case AuthActionType.SIGN_UP:
+      console.log(action.payload);
       return action.payload;
 
     case AuthActionType.SIGN_IN:
@@ -16,7 +15,7 @@ const reducer = (state: IUser = {}, action: AuthAction) => {
       return action.payload;
 
     default:
-      return state;
+      return null;
   }
 };
 

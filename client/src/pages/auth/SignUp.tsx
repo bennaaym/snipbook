@@ -18,6 +18,7 @@ import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 import { AuthActionCreators } from "../../redux/actions-creators";
 import { Link } from "react-router-dom";
+import { useRedirectAfterAuth } from "../../hooks";
 
 export const useStyles = makeStyles({
   root: {
@@ -73,6 +74,7 @@ export const CustomTextField = withStyles({
 const SignUp = () => {
   const classes = useStyles();
   const dispatch: Dispatch<any> = useDispatch();
+  const redirect = useRedirectAfterAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -100,11 +102,14 @@ const SignUp = () => {
     }),
     onSubmit: ({ firstName, lastName, email, password }) => {
       dispatch(
-        AuthActionCreators.signup({
-          name: `${firstName} ${lastName}`,
-          email,
-          password,
-        })
+        AuthActionCreators.signup(
+          {
+            name: `${firstName} ${lastName}`,
+            email,
+            password,
+          },
+          redirect
+        )
       );
     },
   });

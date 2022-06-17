@@ -1,8 +1,8 @@
 import { AuthActionType } from "../action-types";
 
 export interface IAuthPayload {
-  token: string;
-  user: {
+  token?: string;
+  user?: {
     id: number;
     name: string;
   };

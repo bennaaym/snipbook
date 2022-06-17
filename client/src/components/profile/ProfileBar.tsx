@@ -63,7 +63,11 @@ const useStyles = makeStyles({
   },
 });
 
-const ProfileBar = () => {
+interface IProps {
+  name: string;
+}
+
+const ProfileBar: React.FC<IProps> = ({ name }: IProps) => {
   const classes = useStyles();
   const navigate = useNavigate();
 
@@ -97,7 +101,7 @@ const ProfileBar = () => {
                 fontWeight={700}
                 className={classes.userName}
               >
-                marry curry
+                {name}
               </Typography>
             </Stack>
           </Toolbar>

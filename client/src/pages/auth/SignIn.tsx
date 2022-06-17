@@ -8,10 +8,12 @@ import { Dispatch } from "redux";
 import { AuthActionCreators } from "../../redux/actions-creators";
 import { CustomTextField, useStyles } from "./SignUp";
 import { Link } from "react-router-dom";
+import { useRedirectAfterAuth } from "../../hooks";
 
 const SignUp = () => {
   const classes = useStyles();
   const dispatch: Dispatch<any> = useDispatch();
+  const redirect = useRedirectAfterAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -25,7 +27,7 @@ const SignUp = () => {
         .required("Password required"),
     }),
     onSubmit: (values) => {
-      dispatch(AuthActionCreators.signin(values));
+      dispatch(AuthActionCreators.signin(values, redirect));
     },
   });
 
