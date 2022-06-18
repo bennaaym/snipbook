@@ -68,31 +68,50 @@ export class AuthService {
   }
 
   signout(response: Response) {
-    response.cookie('jwt', '', { maxAge: 1 });
+    // response.cookie('jwt', '', { maxAge: 1 });
+    const cookieConfig = {
+      sameSite: 'none' as 'none',
+      secure: process.env.NODE_DEV === 'production',
+      httpOnly: true,
+    };
+    response.clearCookie('jwt', cookieConfig);
     response.status(200).json({
       status: 'success',
       data: null,
     });
   }
 
-  private async signToken(id: number) {
-    return await JWT.sign({ id }, process.env.JWT_SECRET, {
+  refresh(request: Request) {
+    // verify token
+    const token = request.cookies.jwt;
+    if (!token) throw new HttpException('Invalid Token', HttpStatus.FORBIDDEN);
+
+    const payload = JWT.verify(token, process.env.JWT_SECRET) as {
+      id: number;
+      name: string;
+    };
+    if (!payload)
+      throw new HttpException('Invalid Token', HttpStatus.FORBIDDEN);
+
+    // generate a new token
+    return this.createSendToken(payload);
+  }
+
+  private async signToken(payload: { id: number; name: string }) {
+    return await JWT.sign(payload, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
   }
 
   private async createSendToken(user: { id: number; name: string }) {
-    const token = await this.signToken(user.id);
+    const token = await this.signToken({
+      id: user.id,
+      name: user.name,
+    });
 
     return {
       status: 'success',
       token,
-      data: {
-        user: {
-          id: user.id,
-          name: user.name,
-        },
-      },
     };
   }
 }

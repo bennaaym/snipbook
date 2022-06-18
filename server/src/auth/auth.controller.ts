@@ -1,5 +1,12 @@
-import { Body, Controller, Post, Res, UseInterceptors } from '@nestjs/common';
-import { Response } from 'express';
+import {
+  Body,
+  Controller,
+  Post,
+  Req,
+  Res,
+  UseInterceptors,
+} from '@nestjs/common';
+import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { SignInDto, SignUpDto } from './dtos/auth.dto';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
@@ -22,5 +29,10 @@ export class AuthController {
   @Post('signout')
   signout(@Res() response: Response) {
     return this.authService.signout(response);
+  }
+
+  @Post('refresh')
+  refresh(@Req() request: Request) {
+    return this.authService.refresh(request);
   }
 }

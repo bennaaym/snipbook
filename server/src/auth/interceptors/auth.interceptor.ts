@@ -16,7 +16,7 @@ export class AuthInterceptor implements NestInterceptor {
         if (data?.token) {
           const response: Response = context.switchToHttp().getResponse();
           const cookieConfig = {
-            expires: new Date(Date.now() + 3 * 24 * 3600 * 1000),
+            maxAge: 1000 * 60,
             secure: process.env.NODE_DEV === 'production',
             httpOnly: true,
           };
