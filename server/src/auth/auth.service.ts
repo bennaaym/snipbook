@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { ISignIn, ISignUp } from './interfaces/auth.interface';
 import * as bcrypt from 'bcrypt';
 import * as JWT from 'jsonwebtoken';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -48,7 +49,7 @@ export class AuthService {
 
     if (!user) {
       return new HttpException(
-        { status: 'fail', message: 'Invalid Email or Password' },
+        { status: 'fail', message: 'Invalid Credentials ' },
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -57,13 +58,21 @@ export class AuthService {
     const isCorrectPassword = await bcrypt.compare(password, user.password);
     if (!isCorrectPassword) {
       return new HttpException(
-        { status: 'fail', message: 'Invalid Email or Password' },
+        { status: 'fail', message: 'Invalid Credentials ' },
         HttpStatus.BAD_REQUEST,
       );
     }
 
     // generate a jwt token and send response
     return await this.createSendToken(user);
+  }
+
+  signout(response: Response) {
+    response.cookie('jwt', '', { maxAge: 1 });
+    response.status(200).json({
+      status: 'success',
+      data: null,
+    });
   }
 
   private async signToken(id: number) {

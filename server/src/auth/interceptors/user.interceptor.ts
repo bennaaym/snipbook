@@ -14,7 +14,10 @@ export class UserInterceptor implements NestInterceptor {
     next: CallHandler<any>,
   ): Observable<any> | Promise<Observable<any>> {
     const request = context.switchToHttp().getRequest();
-    const token = request.headers?.authorization?.split(' ')[1];
+    let token = request.headers?.authorization?.split(' ')[1];
+    if (!token) {
+      token = request.cookies?.jwt;
+    }
     const user = JWT.decode(token);
     request.user = user;
     return next.handle();
