@@ -14,6 +14,7 @@ export interface ISignInBody {
 class AuthService {
   signup = (body: ISignUpBody) => apiClient.post("/auth/signup", body);
   signin = (body: ISignInBody) => apiClient.post("/auth/signin", body);
+  signout = () => apiClient.post("/auth/signout");
 }
 
 export default new AuthService();

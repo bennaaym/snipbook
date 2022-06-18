@@ -11,12 +11,15 @@ import {
   Button,
   ListItemIcon,
 } from "@mui/material";
-import { AccountBox, AccountCircle, Logout } from "@mui/icons-material";
+import { AccountBox, Logout } from "@mui/icons-material";
 import ActionButton from "./ActionButton";
 import { makeStyles } from "@mui/styles";
 import { customTheme } from "../common";
 import { useAuth } from "../hooks";
 import userAvatar from "../static/images/user_avatar.jpg";
+import { useDispatch } from "react-redux";
+import { Dispatch } from "redux";
+import { AuthActionCreators } from "../redux/actions-creators";
 
 const useStyles = makeStyles({
   toolBar: {
@@ -51,6 +54,8 @@ const NavMenu = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
+  const dispatch: Dispatch<any> = useDispatch();
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -81,14 +86,17 @@ const NavMenu = () => {
           </MenuItem>
         </Link>
 
-        <Link to="/profile/posts" className={classes.link}>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Logout fontSize="small" />
-            </ListItemIcon>
-            Logout
-          </MenuItem>
-        </Link>
+        <MenuItem
+          onClick={() => {
+            dispatch(AuthActionCreators.signout(() => navigate("/signin")));
+            handleClose();
+          }}
+        >
+          <ListItemIcon>
+            <Logout fontSize="small" />
+          </ListItemIcon>
+          Logout
+        </MenuItem>
       </Menu>
     </Box>
   );
@@ -96,9 +104,9 @@ const NavMenu = () => {
 
 const NavBar = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
   const { pathname } = useLocation();
   const { data: auth } = useAuth();
+  const navigate = useNavigate();
 
   if (excludedRouted.includes(pathname)) return <></>;
 

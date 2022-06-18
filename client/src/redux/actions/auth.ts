@@ -17,6 +17,7 @@ interface IAuthSuccessAction {
   type: AuthActionType.AUTH_SUCCESS;
   payload: IAuthPayload;
 }
+
 interface IAuthErrorAction {
   type: AuthActionType.AUTH_ERROR;
   payload: string;

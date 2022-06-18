@@ -1,7 +1,12 @@
 import { Dispatch } from "redux";
 import { AuthService } from "../../services";
 import { ISignInBody, ISignUpBody } from "../../services/auth.service";
-import { authError, authStart, authSuccess } from "../actions/auth";
+import {
+  authError,
+  authStart,
+  authSuccess,
+  IAuthPayload,
+} from "../actions/auth";
 
 export const signup = (body: ISignUpBody, redirect: () => void) => {
   return async (dispatch: Dispatch) => {
@@ -35,6 +40,21 @@ export const signin = (body: ISignInBody, redirect: () => void) => {
           user: data?.data?.user,
         })
       );
+      redirect();
+    } catch (err: any) {
+      console.log(err);
+      dispatch(authError(err.message));
+    }
+  };
+};
+
+export const signout = (redirect: () => void) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      dispatch(authStart());
+      const { data } = await AuthService.signout();
+      if (data.status !== "success") throw new Error(data?.response?.message);
+      dispatch(authSuccess({} as IAuthPayload));
       redirect();
     } catch (err: any) {
       console.log(err);

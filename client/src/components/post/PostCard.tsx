@@ -46,7 +46,6 @@ const PostCard: React.FC<IProps> = ({
   const dispatch: Dispatch<any> = useDispatch();
   const navigate = useNavigate();
   const { data: auth } = useAuth();
-  console.log(auth);
   const handleUpdate = () => {
     navigate(`/profile/post/update/${id}`);
   };
