@@ -2,7 +2,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks";
 
 const ProtectedRoute = () => {
-  const auth = useAuth();
+  const { data: auth } = useAuth();
   const location = useLocation();
   return auth?.user ? (
     <Outlet />

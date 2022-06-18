@@ -45,7 +45,8 @@ const PostCard: React.FC<IProps> = ({
 }) => {
   const dispatch: Dispatch<any> = useDispatch();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { data: auth } = useAuth();
+  console.log(auth);
   const handleUpdate = () => {
     navigate(`/profile/post/update/${id}`);
   };
@@ -54,7 +55,7 @@ const PostCard: React.FC<IProps> = ({
   };
 
   const handleLike = () => {
-    if (!user?.id) {
+    if (!auth?.user?.id) {
       navigate("/signin");
       return;
     }
@@ -76,7 +77,7 @@ const PostCard: React.FC<IProps> = ({
           </Avatar>
         }
         action={
-          user?.id === userId ? (
+          auth?.user?.id === userId ? (
             <Box>
               <IconButton aria-label="settings" onClick={handleDelete}>
                 <Delete />

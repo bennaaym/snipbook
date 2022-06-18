@@ -1,45 +1,55 @@
+import { NavigateFunction } from "react-router-dom";
 import { Dispatch } from "redux";
-import * as API from "../../api";
-import { ICreatePostBody, IUpdatePostBody } from "../../api/interfaces/post";
+import { PostService } from "../../services";
+import { ICreatePostBody, IUpdatePostBody } from "../../services/post.service";
 import { PostActionType } from "../action-types";
-import { PostAction } from "../actions/post";
 
 export const getAllPosts = () => {
-  return async (dispatch: Dispatch<PostAction>) => {
+  return async (dispatch: Dispatch) => {
     try {
-      const res = await API.getAllPosts();
+      const { data } = await PostService.getAllPosts();
       dispatch({
         type: PostActionType.FETCH_ALL,
-        payload: res?.data?.data?.posts || [],
+        payload: data?.data?.posts || [],
       });
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
     }
   };
 };
 
-export const createPost = (body: ICreatePostBody) => {
-  return async (dispatch: Dispatch<PostAction>) => {
+export const createPost = (
+  body: ICreatePostBody,
+  navigate: NavigateFunction
+) => {
+  return async (dispatch: Dispatch) => {
     try {
-      const res = await API.createPost(body);
+      const { data } = await PostService.createPost(body);
+
       dispatch({
         type: PostActionType.CREATE,
-        payload: res?.data?.data?.post,
+        payload: data?.data?.post,
       });
-    } catch (err) {
-      console.log(err);
+      navigate("/posts");
+    } catch (err: any) {
+      console.log(err.message);
     }
   };
 };
 
-export const updatePost = (id: number, body: IUpdatePostBody) => {
-  return async (dispatch: Dispatch<PostAction>) => {
+export const updatePost = (
+  id: number,
+  body: IUpdatePostBody,
+  navigate: NavigateFunction
+) => {
+  return async (dispatch: Dispatch) => {
     try {
-      const res = await API.updatePost(id, body);
+      const res = await PostService.updatePost(id, body);
       dispatch({
         type: PostActionType.UPDATE,
         payload: res?.data?.data?.post,
       });
+      navigate("/posts");
     } catch (err) {
       console.log(err);
     }
@@ -47,9 +57,9 @@ export const updatePost = (id: number, body: IUpdatePostBody) => {
 };
 
 export const deletePost = (id: number) => {
-  return async (dispatch: Dispatch<PostAction>) => {
+  return async (dispatch: Dispatch) => {
     try {
-      await API.deletePost(id);
+      await PostService.deletePost(id);
       dispatch({
         type: PostActionType.DELETE,
         payload: { id },
@@ -61,9 +71,9 @@ export const deletePost = (id: number) => {
 };
 
 export const likePost = (id: number) => {
-  return async (dispatch: Dispatch<PostAction>) => {
+  return async (dispatch: Dispatch) => {
     try {
-      const res = await API.likePost(id);
+      const res = await PostService.likePost(id);
       dispatch({
         type: PostActionType.LIKE,
         payload: res?.data?.data?.post,

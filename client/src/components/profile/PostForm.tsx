@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Alert, Box, Stack, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Fragment, useMemo, useState } from "react";
 import { useFormik } from "formik";
@@ -81,23 +81,29 @@ const PostForm = () => {
     if (post) {
       // update an existing post
       dispatch(
-        PostActionCreators.updatePost(post.id, {
-          ...values,
-          tags,
-          images: image ? [{ url: image }] : [],
-        })
+        PostActionCreators.updatePost(
+          post.id,
+          {
+            ...values,
+            tags,
+            images: image ? [{ url: image }] : [],
+          },
+          navigate
+        )
       );
     } else {
       // create a new post
       dispatch(
-        PostActionCreators.createPost({
-          ...values,
-          tags,
-          images: image ? [{ url: image }] : [],
-        })
+        PostActionCreators.createPost(
+          {
+            ...values,
+            tags,
+            images: image ? [{ url: image }] : [],
+          },
+          navigate
+        )
       );
     }
-    navigate("/posts");
   };
 
   const formik = useFormik({
@@ -200,6 +206,12 @@ const PostForm = () => {
               value="publish"
               className={classes.submitButton}
             />
+
+            {/* <Box mt={5}>
+              <Alert variant="filled" severity="error">
+                {}
+              </Alert> 
+                </Box>*/}
           </Stack>
         </form>
       </Box>

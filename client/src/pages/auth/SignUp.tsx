@@ -8,6 +8,8 @@ import {
   Box,
   Typography,
   Stack,
+  Alert,
+  CircularProgress,
 } from "@mui/material";
 import { LockOutlined } from "@mui/icons-material";
 import { makeStyles, withStyles } from "@mui/styles";
@@ -18,7 +20,7 @@ import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 import { AuthActionCreators } from "../../redux/actions-creators";
 import { Link } from "react-router-dom";
-import { useRedirectAfterAuth } from "../../hooks";
+import { useAuth, useRedirectAfterAuth } from "../../hooks";
 
 export const useStyles = makeStyles({
   root: {
@@ -75,6 +77,7 @@ const SignUp = () => {
   const classes = useStyles();
   const dispatch: Dispatch<any> = useDispatch();
   const redirect = useRedirectAfterAuth();
+  const { error, loading } = useAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -228,7 +231,14 @@ const SignUp = () => {
             variant="contained"
             className={classes.submitButton}
           >
-            Sign Up
+            {!loading ? (
+              "Sign in"
+            ) : (
+              <CircularProgress
+                sx={{ color: customTheme.color.background }}
+                size={24}
+              />
+            )}
           </Button>
           <Grid container justifyContent="flex-end" mt={2}>
             <Grid item>
@@ -237,6 +247,13 @@ const SignUp = () => {
               </Link>
             </Grid>
           </Grid>
+          {error && (
+            <Box mt={5}>
+              <Alert variant="filled" severity="error">
+                {error}
+              </Alert>
+            </Box>
+          )}
         </Box>
       </Stack>
     </Box>

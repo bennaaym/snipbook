@@ -1,9 +1,10 @@
+import { Fragment, useEffect } from "react";
 import { Box } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { Fragment, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Dispatch } from "redux";
-import { Loading, PageContainer, PostCard } from "../../components";
+import { ErrorModal, Loading, PageContainer, PostCard } from "../../components";
 import { useAuth, usePosts } from "../../hooks";
 import { PostActionCreators } from "../../redux/actions-creators";
 
@@ -19,6 +20,7 @@ const useStyles = makeStyles({
 
 const Posts = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
   const auth = useAuth();
   const posts = usePosts();
 
@@ -28,7 +30,8 @@ const Posts = () => {
   }, [auth, dispatch]);
   return (
     <Fragment>
-      {posts.length ? (
+      {!posts.length && <Loading />}
+      {posts.length && (
         <PageContainer>
           <Box className={classes.posts}>
             {posts.map((post: any) => {
@@ -48,8 +51,6 @@ const Posts = () => {
             })}
           </Box>
         </PageContainer>
-      ) : (
-        <Loading />
       )}
     </Fragment>
   );

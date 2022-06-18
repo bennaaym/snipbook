@@ -6,3 +6,4 @@ export { default as ProfilePosts } from "./profile/ProfilePosts";
 export { default as PostFrom } from "./profile/PostForm";
 export { default as PostCard } from "./post/PostCard";
 export { default as Loading } from "./Loading";
+export { default as ErrorModal } from "./ErrorModal";

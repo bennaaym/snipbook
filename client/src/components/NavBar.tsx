@@ -98,7 +98,7 @@ const NavBar = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { user } = useAuth();
+  const { data: auth } = useAuth();
 
   if (excludedRouted.includes(pathname)) return <></>;
 
@@ -127,7 +127,7 @@ const NavBar = () => {
               </Link>
             </li>
             <li>
-              {!user ? (
+              {!auth?.user ? (
                 <ActionButton
                   label={"sign in"}
                   color={customTheme.color.background}

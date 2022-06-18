@@ -1,6 +1,7 @@
 enum AuthActionType {
-  SIGN_UP = "SIGN_UP",
-  SIGN_IN = "SIGN_IN",
+  AUTH_START = "AUTH_START",
+  AUTH_SUCCESS = "AUTH_SUCCESS",
+  AUTH_ERROR = "AUTH_ERROR",
 }
 
 export default AuthActionType;

@@ -1,28 +1,32 @@
 import { PostActionType } from "../action-types";
 import { IPost, PostAction } from "../actions/post";
 
-const reducer = (state: IPost[] = [], action: PostAction) => {
-  switch (action.type) {
+const reducer = (state: IPost[] = [], { type, payload }: PostAction) => {
+  switch (type) {
     case PostActionType.FETCH_ALL:
-      return [...action.payload];
+      return payload;
 
     case PostActionType.CREATE:
-      return [action.payload, ...state];
+      return [...state, payload];
 
     case PostActionType.UPDATE:
       const postsAfterUpdate = state.filter(
-        (post: any) => post.id !== action.payload.id
+        (post: any) => post.id !== payload.id
       );
-      return [action.payload, ...postsAfterUpdate];
+      return [payload, ...postsAfterUpdate];
 
     case PostActionType.DELETE:
-      return state.filter((post: any) => post.id !== action.payload.id);
+      const postsAfterDelete = state.filter(
+        (post: any) => post.id !== payload.id
+      );
+      return [payload, ...postsAfterDelete];
 
     case PostActionType.LIKE:
       const postsAfterLike = state.filter(
-        (post: any) => post.id !== action.payload.id
+        (post: any) => post.id !== payload.id
       );
-      return [action.payload, ...postsAfterLike];
+
+      return [payload.data, postsAfterLike];
 
     default:
       return state;

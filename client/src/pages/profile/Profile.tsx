@@ -14,10 +14,10 @@ const useStyles = makeStyles({
 
 const Profile = () => {
   const classes = useStyles();
-  const { user } = useAuth();
+  const { data: auth } = useAuth();
   return (
     <Fragment>
-      <ProfileBar name={user?.name || "user"} />
+      <ProfileBar name={auth?.user?.name || "user"} />
       <Box className={classes.profileContent}>
         <PageContainer>
           <Outlet />
