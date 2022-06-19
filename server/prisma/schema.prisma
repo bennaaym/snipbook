@@ -18,7 +18,7 @@ model Post {
   images                  Image[]
   likeCount               Int @default(0)
   createdAt               DateTime  @default(now())
-  updateAt                DateTime  @default(now())
+  updatedAt               DateTime  @default(now())
   userId                  Int
   user                    User  @relation(fields: [userId], references: [id])
 }
@@ -26,8 +26,10 @@ model Post {
 model Image {
   id                      Int  @id @default(autoincrement())
   url                     String
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @default(now())    
   postId                  Int
-  post                    Post @relation(fields: [postId], references: [id])    
+  post                    Post @relation(fields: [postId], references: [id])
 }
 
 model User {
@@ -37,5 +39,6 @@ model User {
   password                String
   createdAt               DateTime  @default(now())
   updatedAt               DateTime  @default(now())
+  refreshToken            String  @default("")
   posts                   Post[]
 }

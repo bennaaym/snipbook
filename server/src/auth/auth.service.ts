@@ -3,7 +3,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { ISignIn, ISignUp } from './interfaces/auth.interface';
 import * as bcrypt from 'bcrypt';
 import * as JWT from 'jsonwebtoken';
-import { Request, Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -37,7 +36,12 @@ export class AuthService {
     });
 
     // generate a jwt token and send response
-    return await this.createSendToken(newUser);
+    const refreshToken = await this.createSaveRefreshToken(newUser);
+
+    return {
+      json: this.createSendAccessToken(newUser),
+      refreshToken,
+    };
   }
 
   async signin({ email, password }: ISignIn) {
@@ -64,54 +68,105 @@ export class AuthService {
     }
 
     // generate a jwt token and send response
-    return await this.createSendToken(user);
+    const refreshToken = await this.createSaveRefreshToken(user);
+
+    return {
+      json: this.createSendAccessToken(user),
+      refreshToken,
+    };
   }
 
-  signout(response: Response) {
-    // response.cookie('jwt', '', { maxAge: 1 });
-    const cookieConfig = {
-      sameSite: 'none' as 'none',
-      secure: process.env.NODE_DEV === 'production',
-      httpOnly: true,
-    };
-    response.clearCookie('jwt', cookieConfig);
-    response.status(200).json({
-      status: 'success',
-      data: null,
+  async signout(refreshToken: string) {
+    if (!refreshToken) return;
+
+    const { id } = JWT.decode(refreshToken) as { id: number; name: string };
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) return;
+
+    await this.prismaService.user.update({
+      where: {
+        id,
+      },
+      data: {
+        refreshToken: '',
+      },
     });
   }
 
-  refresh(request: Request) {
+  async refresh(refreshToken: string) {
     // verify token
-    const token = request.cookies.jwt;
-    if (!token) throw new HttpException('Invalid Token', HttpStatus.FORBIDDEN);
+    if (!refreshToken)
+      throw new HttpException('Invalid Token', HttpStatus.FORBIDDEN);
 
-    const payload = JWT.verify(token, process.env.JWT_SECRET) as {
+    const payload = JWT.verify(
+      refreshToken,
+      process.env.JWT_REFRESH_TOKEN_SECRET,
+    ) as {
       id: number;
       name: string;
     };
     if (!payload)
       throw new HttpException('Invalid Token', HttpStatus.FORBIDDEN);
 
+    const { id } = JWT.decode(refreshToken) as { id: number; name: string };
+
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        id,
+        refreshToken,
+      },
+    });
+
+    if (!user) throw new HttpException('Invalid Token', HttpStatus.FORBIDDEN);
+
     // generate a new token
-    return this.createSendToken(payload);
+    return this.createSendAccessToken(payload);
   }
 
-  private async signToken(payload: { id: number; name: string }) {
-    return await JWT.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES_IN,
+  private signAccessToken(payload: { id: number; name: string }) {
+    return JWT.sign(payload, process.env.JWT_ACCESS_TOKEN_SECRET, {
+      expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES_IN,
     });
   }
 
-  private async createSendToken(user: { id: number; name: string }) {
-    const token = await this.signToken({
+  private signRefreshToken(payload: { id: number; name: string }) {
+    return JWT.sign(payload, process.env.JWT_REFRESH_TOKEN_SECRET, {
+      expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN,
+    });
+  }
+
+  private async createSaveRefreshToken(user: { id: number; name: string }) {
+    const refreshToken = this.signRefreshToken({
+      id: user.id,
+      name: user.name,
+    });
+
+    await this.prismaService.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        refreshToken,
+      },
+    });
+
+    return refreshToken;
+  }
+
+  private createSendAccessToken(user: { id: number; name: string }) {
+    const accessToken = this.signAccessToken({
       id: user.id,
       name: user.name,
     });
 
     return {
       status: 'success',
-      token,
+      accessToken,
     };
   }
 }

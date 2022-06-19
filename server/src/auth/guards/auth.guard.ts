@@ -16,11 +16,8 @@ export class AuthGuard implements CanActivate {
     try {
       // verify jwt token
       const request = context.switchToHttp().getRequest();
-      let token = request.headers.authorization?.split(' ')[1];
-      if (!token) {
-        token = request.cookies.jwt;
-      }
-      const { id } = JWT.verify(token, process.env.JWT_SECRET) as {
+      const token = request.headers.authorization?.split(' ')[1];
+      const { id } = JWT.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET) as {
         id: number;
       };
       // find user with the specific id save in the token

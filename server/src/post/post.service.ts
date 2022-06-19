@@ -2,6 +2,16 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ICreatePostBody, IUpdatePostBody } from './interfaces/post.interface';
 
+const basePostFields = {
+  id: true,
+  userId: true,
+  title: true,
+  description: true,
+  tags: true,
+  likeCount: true,
+  updatedAt: true,
+};
+
 @Injectable()
 export class PostService {
   constructor(private readonly prismaService: PrismaService) {}
@@ -9,24 +19,11 @@ export class PostService {
   async getAllPosts() {
     const allPosts = await this.prismaService.post.findMany({
       select: {
-        id: true,
-        userId: true,
-        title: true,
-        description: true,
-        tags: true,
-        likeCount: true,
-        updateAt: true,
-
-        // images: {
-        //   select: {
-        //     url: true,
-        //   },
-        //   take: 1,
-        // },
+        ...basePostFields,
       },
       orderBy: [
         {
-          updateAt: 'desc',
+          updatedAt: 'desc',
         },
       ],
     });
@@ -42,13 +39,7 @@ export class PostService {
   async getPostById(id: number) {
     const post = await this.prismaService.post.findUnique({
       select: {
-        id: true,
-        userId: true,
-        title: true,
-        description: true,
-        tags: true,
-        likeCount: true,
-        updateAt: true,
+        ...basePostFields,
       },
       where: { id },
     });
@@ -76,6 +67,10 @@ export class PostService {
   ) {
     // create a new record in the Post table
     const newPost = await this.prismaService.post.create({
+      select: {
+        ...basePostFields,
+      },
+
       data: {
         title,
         description,
@@ -132,6 +127,9 @@ export class PostService {
 
     // update the record
     const updatedPost = await this.prismaService.post.update({
+      select: {
+        ...basePostFields,
+      },
       where: {
         id,
       },
@@ -139,7 +137,7 @@ export class PostService {
         title,
         description,
         tags: tags.length ? tags : post.tags,
-        updateAt: new Date(Date.now()),
+        updatedAt: new Date(Date.now()),
       },
     });
 
@@ -178,13 +176,7 @@ export class PostService {
     // update the record
     const updatedPost = await this.prismaService.post.update({
       select: {
-        id: true,
-        userId: true,
-        title: true,
-        description: true,
-        tags: true,
-        likeCount: true,
-        updateAt: true,
+        ...basePostFields,
       },
       where: {
         id,
