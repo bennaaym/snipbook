@@ -22,9 +22,12 @@ export const createPost = (
   body: ICreatePostBody,
   navigate: NavigateFunction
 ) => {
-  return async (dispatch: Dispatch) => {
+  return async (dispatch: Dispatch, getState: CallableFunction) => {
     try {
-      const { data } = await PostService.createPost(body);
+      const { data } = await PostService.createPost(
+        body,
+        getState().auth.data.accessToken
+      );
 
       dispatch({
         type: PostActionType.CREATE,
@@ -42,12 +45,16 @@ export const updatePost = (
   body: IUpdatePostBody,
   navigate: NavigateFunction
 ) => {
-  return async (dispatch: Dispatch) => {
+  return async (dispatch: Dispatch, getState: CallableFunction) => {
     try {
-      const res = await PostService.updatePost(id, body);
+      const { data } = await PostService.updatePost(
+        id,
+        body,
+        getState().auth.data.accessToken
+      );
       dispatch({
         type: PostActionType.UPDATE,
-        payload: res?.data?.data?.post,
+        payload: data?.data?.post,
       });
       navigate("/posts");
     } catch (err) {
@@ -57,9 +64,9 @@ export const updatePost = (
 };
 
 export const deletePost = (id: number) => {
-  return async (dispatch: Dispatch) => {
+  return async (dispatch: Dispatch, getState: CallableFunction) => {
     try {
-      await PostService.deletePost(id);
+      await PostService.deletePost(id, getState().auth.data.accessToken);
       dispatch({
         type: PostActionType.DELETE,
         payload: { id },
@@ -71,12 +78,15 @@ export const deletePost = (id: number) => {
 };
 
 export const likePost = (id: number) => {
-  return async (dispatch: Dispatch) => {
+  return async (dispatch: Dispatch, getState: CallableFunction) => {
     try {
-      const res = await PostService.likePost(id);
+      const { data } = await PostService.likePost(
+        id,
+        getState().auth.data.accessToken
+      );
       dispatch({
         type: PostActionType.LIKE,
-        payload: res?.data?.data?.post,
+        payload: data?.data?.post,
       });
     } catch (err) {
       console.log(err);

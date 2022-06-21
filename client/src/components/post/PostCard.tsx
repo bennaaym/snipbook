@@ -29,7 +29,7 @@ interface IProps {
   description: string;
   tags: string[];
   imgUrl: string;
-  likes: number;
+  likes: { id: number; userId: number; createdAt: number }[];
   updatedAt: Date;
 }
 
@@ -54,12 +54,16 @@ const PostCard: React.FC<IProps> = ({
   };
 
   const handleLike = () => {
-    if (!auth?.user?.id) {
+    if (!auth?.accessToken) {
       navigate("/signin");
       return;
     }
     dispatch(PostActionCreators.likePost(id));
   };
+
+  const userLikedPost = React.useMemo(() => {
+    return Boolean(likes.find((like) => like.userId === auth?.user?.id));
+  }, [auth, likes]);
 
   return (
     <Card sx={{ width: 400 }}>
@@ -140,7 +144,11 @@ const PostCard: React.FC<IProps> = ({
         style={{ display: "flex", justifyContent: "space-between" }}
       >
         <Box>
-          <IconButton aria-label="add to favorites" onClick={handleLike}>
+          <IconButton
+            aria-label="add to favorites"
+            onClick={handleLike}
+            sx={{ color: userLikedPost ? customTheme.color.pink : "gray" }}
+          >
             <Favorite />
           </IconButton>
           <Typography
@@ -149,7 +157,7 @@ const PostCard: React.FC<IProps> = ({
             fontSize={16}
             marginLeft={1}
           >
-            {likes}
+            {likes.length}
           </Typography>
         </Box>
         <IconButton aria-label="share">

@@ -9,9 +9,9 @@ const App = () => {
     <div className="App">
       <NavBar />
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/" element={<Home />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/profile" element={<Profile />}>
             <Route path="posts" element={<ProfilePosts />} />

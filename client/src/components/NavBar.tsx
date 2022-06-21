@@ -135,7 +135,7 @@ const NavBar = () => {
               </Link>
             </li>
             <li>
-              {!auth?.user ? (
+              {!auth?.accessToken ? (
                 <ActionButton
                   label={"sign in"}
                   color={customTheme.color.background}

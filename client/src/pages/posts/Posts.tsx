@@ -2,9 +2,8 @@ import { Fragment, useEffect } from "react";
 import { Box } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { Dispatch } from "redux";
-import { ErrorModal, Loading, PageContainer, PostCard } from "../../components";
+import { Loading, PageContainer, PostCard } from "../../components";
 import { useAuth, usePosts } from "../../hooks";
 import { PostActionCreators } from "../../redux/actions-creators";
 
@@ -20,7 +19,6 @@ const useStyles = makeStyles({
 
 const Posts = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
   const auth = useAuth();
   const posts = usePosts();
 
@@ -43,7 +41,7 @@ const Posts = () => {
                   title={post.title}
                   description={post.description}
                   tags={post.tags}
-                  likes={post.likeCount}
+                  likes={post.likes}
                   imgUrl={post.images ? post.images[0]?.url : null}
                   updatedAt={post.updatedAt}
                 />

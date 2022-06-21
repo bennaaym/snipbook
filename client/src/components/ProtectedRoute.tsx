@@ -4,7 +4,7 @@ import { useAuth } from "../hooks";
 const ProtectedRoute = () => {
   const { data: auth } = useAuth();
   const location = useLocation();
-  return auth?.user ? (
+  return auth?.accessToken ? (
     <Outlet />
   ) : (
     <Navigate to="/signin" state={{ from: location }} replace />

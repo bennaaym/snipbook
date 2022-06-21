@@ -6,7 +6,7 @@ export interface IPost {
   title: string;
   description: string;
   tags: string[];
-  likeCount: number;
+  likes: { id: number; userId: number; createdAt: Date }[];
   updateAt: Date;
 }
 
@@ -32,7 +32,7 @@ interface DeleteAction {
 
 interface LikeAction {
   type: PostActionType.LIKE;
-  payload: { [key: string]: any };
+  payload: IPost;
 }
 
 export type PostAction =

@@ -17,12 +17,35 @@ export interface IUpdatePostBody {
 
 class PostService {
   getAllPosts = () => apiClient.get("/post");
-  createPost = (body: ICreatePostBody) => apiClient.post("post", body);
-  updatePost = (id: number, body: IUpdatePostBody) =>
-    apiClient.patch(`post/${id}`, body);
+  createPost = (body: ICreatePostBody, accessToken: string) =>
+    apiClient.post("post", body, {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+  updatePost = (id: number, body: IUpdatePostBody, accessToken: string) =>
+    apiClient.patch(`post/${id}`, body, {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
 
-  deletePost = (id: number) => apiClient.delete(`post/${id}`);
-  likePost = (id: number) => apiClient.patch(`post/${id}/likes`);
+  deletePost = (id: number, accessToken: string) =>
+    apiClient.delete(`post/${id}`, {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+  likePost = (id: number, accessToken: string) =>
+    apiClient.patch(
+      `post/${id}/likes`,
+      {},
+      {
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
 }
 
 export default new PostService();
