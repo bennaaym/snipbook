@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ICreatePostBody, IUpdatePostBody } from './interfaces/post.interface';
 
-const basePostFields = {
+export const basePostFields = {
   id: true,
   userId: true,
   title: true,
