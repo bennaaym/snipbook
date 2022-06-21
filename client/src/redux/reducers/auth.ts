@@ -11,7 +11,7 @@ const initialState = {
   data: {} as IAuthPayload,
   loading: false,
   error: null,
-};
+} as IAuthState;
 
 const reducer = (
   state: IAuthState = initialState,

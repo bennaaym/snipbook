@@ -55,6 +55,7 @@ const NavMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+  const { data: auth } = useAuth();
   const dispatch: Dispatch<any> = useDispatch();
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -77,7 +78,7 @@ const NavMenu = () => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <Link to="/profile/posts" className={classes.link}>
+        <Link to={`profile/${auth?.user?.id}`} className={classes.link}>
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <AccountBox fontSize="small" />

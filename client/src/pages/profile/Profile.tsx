@@ -1,9 +1,12 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { Box } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { PageContainer, ProfileBar } from "../../components";
-import { Outlet } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import { useAuth } from "../../hooks";
+import { useDispatch } from "react-redux";
+import { Dispatch } from "redux";
+import { ProfileActionCreators } from "../../redux/actions-creators";
 
 const useStyles = makeStyles({
   profileContent: {
@@ -15,9 +18,16 @@ const useStyles = makeStyles({
 const Profile = () => {
   const classes = useStyles();
   const { data: auth } = useAuth();
+  const dispatch: Dispatch<any> = useDispatch();
+  const { id } = useParams();
+
+  useEffect(() => {
+    dispatch(ProfileActionCreators.getProfile(Number(id)));
+  }, [id, dispatch]);
+
   return (
     <Fragment>
-      <ProfileBar name={auth?.user?.name || "user"} />
+      <ProfileBar />
       <Box className={classes.profileContent}>
         <PageContainer>
           <Outlet />

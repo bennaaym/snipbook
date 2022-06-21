@@ -29,7 +29,7 @@ interface IProps {
   description: string;
   tags: string[];
   imgUrl: string;
-  likes: { id: number; userId: number; createdAt: number }[];
+  likes: { id: number; userId: number; createdAt: Date }[];
   updatedAt: Date;
 }
 
@@ -65,19 +65,25 @@ const PostCard: React.FC<IProps> = ({
     return Boolean(likes.find((like) => like.userId === auth?.user?.id));
   }, [auth, likes]);
 
+  const handleAvatarClick = () => {
+    navigate(`/profile/${userId}`);
+  };
+
   return (
     <Card sx={{ width: 400 }}>
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe">
-            <img
-              src={postAvatar}
-              alt="post_avatar"
-              style={{ objectFit: "cover" }}
-              width="50px"
-              height="50px"
-            />
-          </Avatar>
+          <IconButton onClick={handleAvatarClick}>
+            <Avatar aria-label="recipe">
+              <img
+                src={postAvatar}
+                alt="post_avatar"
+                style={{ objectFit: "cover" }}
+                width="50px"
+                height="50px"
+              />
+            </Avatar>
+          </IconButton>
         }
         action={
           auth?.user?.id === userId ? (

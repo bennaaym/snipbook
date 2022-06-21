@@ -14,6 +14,9 @@ import userAvatar from "../../static/images/user_avatar.jpg";
 import { customTheme } from "../../common";
 import ProfileBarItem from "./ProfileBarItem";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/reducers";
+import { useAuth } from "../../hooks";
 
 const DRAWER_WIDTH = 340;
 
@@ -63,13 +66,11 @@ const useStyles = makeStyles({
   },
 });
 
-interface IProps {
-  name: string;
-}
-
-const ProfileBar: React.FC<IProps> = ({ name }: IProps) => {
+const ProfileBar = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const { data: auth } = useAuth();
+  const profile = useSelector((state: RootState) => state.profile);
 
   return (
     <Box>
@@ -101,7 +102,7 @@ const ProfileBar: React.FC<IProps> = ({ name }: IProps) => {
                 fontWeight={700}
                 className={classes.userName}
               >
-                {name}
+                {profile.name}
               </Typography>
             </Stack>
           </Toolbar>
@@ -129,7 +130,7 @@ const ProfileBar: React.FC<IProps> = ({ name }: IProps) => {
                 fontSize="medium"
                 sx={{ color: customTheme.color.paragraph }}
               />
-              <Typography>Likes 0</Typography>
+              <Typography>Likes {profile.totalLikes}</Typography>
             </Box>
             <Box className={classes.stats}>
               <Visibility
@@ -143,13 +144,15 @@ const ProfileBar: React.FC<IProps> = ({ name }: IProps) => {
           <Divider />
 
           <List>
-            <ProfileBarItem
-              label="new post"
-              icon={<AddBox sx={{ color: customTheme.color.paragraph }} />}
-              action={() => {
-                navigate("/profile/post/create");
-              }}
-            />
+            {profile.id === auth?.user?.id && (
+              <ProfileBarItem
+                label="new post"
+                icon={<AddBox sx={{ color: customTheme.color.paragraph }} />}
+                action={() => {
+                  navigate("/profile/post/create");
+                }}
+              />
+            )}
           </List>
         </Drawer>
       </Box>

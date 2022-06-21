@@ -12,8 +12,8 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
+    justifyContent: "space-between",
     rowGap: 10,
-    columnGap: 120,
   },
 });
 

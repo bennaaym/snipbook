@@ -7,7 +7,7 @@ export interface IPost {
   description: string;
   tags: string[];
   likes: { id: number; userId: number; createdAt: Date }[];
-  updateAt: Date;
+  updatedAt: Date;
 }
 
 interface FetchAllAction {
