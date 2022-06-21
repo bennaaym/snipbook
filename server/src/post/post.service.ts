@@ -8,7 +8,13 @@ const basePostFields = {
   title: true,
   description: true,
   tags: true,
-  likeCount: true,
+  likes: {
+    select: {
+      id: true,
+      userId: true,
+      createdAt: true,
+    },
+  },
   updatedAt: true,
 };
 
@@ -162,29 +168,52 @@ export class PostService {
         HttpStatus.NOT_FOUND,
       );
 
-    // check if the user owns the post
-    if (post.userId !== userId) {
-      throw new HttpException(
-        {
-          status: 'fail',
-          message: 'Unauthenticated User',
-        },
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
-
-    // update the record
-    const updatedPost = await this.prismaService.post.update({
-      select: {
-        ...basePostFields,
-      },
+    // check if the user liked the post before
+    const like = await this.prismaService.like.findFirst({
       where: {
-        id,
-      },
-      data: {
-        likeCount: post.likeCount + 1,
+        postId: id,
+        userId,
       },
     });
+
+    // user didn't like the post before
+    let updatedPost;
+    if (!like) {
+      // add new record to like table
+      await this.prismaService.like.create({
+        data: {
+          postId: id,
+          userId,
+        },
+      });
+
+      updatedPost = await this.prismaService.post.findUnique({
+        select: {
+          ...basePostFields,
+        },
+        where: {
+          id,
+        },
+      });
+    } else {
+      // delete the like record
+      await this.prismaService.like.deleteMany({
+        where: {
+          postId: id,
+          userId,
+        },
+      });
+
+      // delete the like
+      updatedPost = await this.prismaService.post.findUnique({
+        select: {
+          ...basePostFields,
+        },
+        where: {
+          id,
+        },
+      });
+    }
 
     return {
       status: 'success',

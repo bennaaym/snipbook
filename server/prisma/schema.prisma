@@ -16,11 +16,23 @@ model Post {
   description             String
   tags                    String[]
   images                  Image[]
-  likeCount               Int @default(0)
+  likes                   Like[]
   createdAt               DateTime  @default(now())
   updatedAt               DateTime  @default(now())
   userId                  Int
   user                    User  @relation(fields: [userId], references: [id])
+}
+
+model User {
+  id                      Int @id @default(autoincrement())
+  name                    String
+  email                   String  @unique
+  password                String
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @default(now())
+  refreshToken            String  @default("")
+  likes                   Like[]
+  posts                   Post[]
 }
 
 model Image {
@@ -32,13 +44,11 @@ model Image {
   post                    Post @relation(fields: [postId], references: [id])
 }
 
-model User {
+model Like {
   id                      Int @id @default(autoincrement())
-  name                    String
-  email                   String  @unique
-  password                String
-  createdAt               DateTime  @default(now())
-  updatedAt               DateTime  @default(now())
-  refreshToken            String  @default("")
-  posts                   Post[]
+  postId                  Int
+  post                    Post @relation(fields: [postId], references: [id])
+  userId                  Int
+  user                    User @relation(fields: [userId], references: [id])
+  createdAt               DateTime @default(now())
 }
