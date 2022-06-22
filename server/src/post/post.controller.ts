@@ -10,23 +10,22 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { query } from 'express';
 import { User } from 'src/auth/decorators/user.decorator';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { CreatePostDto, UpdatePostDto } from './dtos/post.dto';
-import { IFilterQuery, PostService } from './post.service';
+import { IPagination, ISearchQuery, PostService } from './post.service';
 
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Get()
-  getAllPosts() {
-    return this.postService.getAllPosts();
+  getAllPosts(@Query() query: IPagination) {
+    return this.postService.getAllPosts(query);
   }
 
   @Get('/search')
-  getPostBySearch(@Query() query: IFilterQuery) {
+  getPostBySearch(@Query() query: ISearchQuery) {
     return this.postService.getPostBySearch(query);
   }
 

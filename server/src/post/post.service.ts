@@ -2,8 +2,12 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ICreatePostBody, IUpdatePostBody } from './interfaces/post.interface';
 
-export interface IFilterQuery {
+export interface ISearchQuery {
   tags: string;
+}
+
+export interface IPagination {
+  page: number;
 }
 
 export const basePostFields = {
@@ -26,7 +30,12 @@ export const basePostFields = {
 export class PostService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getAllPosts() {
+  async getAllPosts(query: IPagination) {
+    // handle pagination
+    const page = Number(query.page) || 1;
+    const limit = 9;
+    const skip = (page - 1) * limit;
+    const total = await this.prismaService.post.count();
     const allPosts = await this.prismaService.post.findMany({
       select: {
         ...basePostFields,
@@ -36,17 +45,21 @@ export class PostService {
           updatedAt: 'desc',
         },
       ],
+      skip,
+      take: limit,
     });
     return {
       status: 'success',
       results: allPosts.length,
       data: {
+        currentPage: page,
+        numberOfPages: Math.ceil(total / limit),
         posts: allPosts,
       },
     };
   }
 
-  async getPostBySearch({ tags }: IFilterQuery) {
+  async getPostBySearch({ tags }: ISearchQuery) {
     const processedTags = tags.split(',');
     const posts = await this.prismaService.post.findMany({
       select: {
