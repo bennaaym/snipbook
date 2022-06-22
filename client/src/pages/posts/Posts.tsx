@@ -3,7 +3,12 @@ import { Box } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
-import { Loading, PageContainer, PostCard } from "../../components";
+import {
+  CustomPagination,
+  Loading,
+  PageContainer,
+  PostCard,
+} from "../../components";
 import { useAuth, usePosts } from "../../hooks";
 import { PostActionCreators } from "../../redux/actions-creators";
 
@@ -48,6 +53,7 @@ const Posts = () => {
               );
             })}
           </Box>
+          <CustomPagination />
         </PageContainer>
       )}
     </Fragment>

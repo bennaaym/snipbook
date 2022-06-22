@@ -7,3 +7,7 @@ export { default as PostFrom } from "./profile/PostForm";
 export { default as PostCard } from "./post/PostCard";
 export { default as Loading } from "./Loading";
 export { default as ErrorModal } from "./ErrorModal";
+export { default as CustomPagination } from "./CustomPagination";
+export { default as PostDetails } from "./post/PostDetails";
+export { default as ProtectedAuth } from "./ProtectedAuth";
+export { default as ProtectedRoute } from "./ProtectedRoute";

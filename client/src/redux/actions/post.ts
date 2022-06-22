@@ -35,9 +35,15 @@ interface LikeAction {
   payload: IPost;
 }
 
+interface SearchAction {
+  type: PostActionType.SEARCH;
+  payload: IPost[];
+}
+
 export type PostAction =
   | FetchAllAction
   | CreateAction
   | UpdateAction
   | DeleteAction
-  | LikeAction;
+  | LikeAction
+  | SearchAction;

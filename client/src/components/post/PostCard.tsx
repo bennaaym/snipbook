@@ -47,7 +47,7 @@ const PostCard: React.FC<IProps> = ({
   const navigate = useNavigate();
   const { data: auth } = useAuth();
   const handleUpdate = () => {
-    navigate(`/profile/post/update/${id}`);
+    navigate(`/profile/${auth?.user.id}/post/update/${id}`);
   };
   const handleDelete = () => {
     dispatch(PostActionCreators.deletePost(id));

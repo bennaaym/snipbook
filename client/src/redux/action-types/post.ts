@@ -4,6 +4,7 @@ enum PostActionType {
   UPDATE = "UPDATE",
   DELETE = "DELETE",
   LIKE = "LIKE",
+  SEARCH = "SEARCH",
 }
 
 export default PostActionType;

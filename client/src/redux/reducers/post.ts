@@ -30,6 +30,9 @@ const reducer = (state: IPost[] = [], { type, payload }: PostAction) => {
 
       return [...state];
 
+    case PostActionType.SEARCH:
+      return payload;
+
     default:
       return state;
   }

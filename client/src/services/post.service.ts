@@ -36,6 +36,7 @@ class PostService {
         authorization: `Bearer ${accessToken}`,
       },
     });
+
   likePost = (id: number, accessToken: string) =>
     apiClient.patch(
       `post/${id}/likes`,
@@ -46,6 +47,8 @@ class PostService {
         },
       }
     );
+
+  getPostBySearch = (query: string) => apiClient.get(`/post/search?${query}`);
 }
 
 export default new PostService();

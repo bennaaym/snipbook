@@ -93,3 +93,18 @@ export const likePost = (id: number) => {
     }
   };
 };
+
+export const getPostBySearch = (query: string, navigate: NavigateFunction) => {
+  return async (dispatch: Dispatch, getState: CallableFunction) => {
+    try {
+      const { data } = await PostService.getPostBySearch(query);
+      dispatch({
+        type: PostActionType.SEARCH,
+        payload: data?.data?.posts || [],
+      });
+      navigate(`/posts/search?${query}`);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};

@@ -9,7 +9,7 @@ import {
   Stack,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { AddBox, ThumbUpAlt, Visibility } from "@mui/icons-material";
+import { AddBox, Panorama, ThumbUpAlt, Visibility } from "@mui/icons-material";
 import userAvatar from "../../static/images/user_avatar.jpg";
 import { customTheme } from "../../common";
 import ProfileBarItem from "./ProfileBarItem";
@@ -143,17 +143,24 @@ const ProfileBar = () => {
 
           <Divider />
 
-          <List>
-            {profile.id === auth?.user?.id && (
+          {profile.id === auth?.user?.id && (
+            <List>
               <ProfileBarItem
                 label="new post"
                 icon={<AddBox sx={{ color: customTheme.color.paragraph }} />}
                 action={() => {
-                  navigate("/profile/post/create");
+                  navigate(`/profile/${auth?.user?.id}/post/create`);
                 }}
               />
-            )}
-          </List>
+              <ProfileBarItem
+                label="my posts"
+                icon={<Panorama sx={{ color: customTheme.color.paragraph }} />}
+                action={() => {
+                  navigate(`/profile/${auth?.user?.id}`);
+                }}
+              />
+            </List>
+          )}
         </Drawer>
       </Box>
     </Box>
