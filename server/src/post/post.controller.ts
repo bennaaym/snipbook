@@ -7,12 +7,14 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
+import { query } from 'express';
 import { User } from 'src/auth/decorators/user.decorator';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { CreatePostDto, UpdatePostDto } from './dtos/post.dto';
-import { PostService } from './post.service';
+import { IFilterQuery, PostService } from './post.service';
 
 @Controller('post')
 export class PostController {
@@ -21,6 +23,11 @@ export class PostController {
   @Get()
   getAllPosts() {
     return this.postService.getAllPosts();
+  }
+
+  @Get('/search')
+  getPostBySearch(@Query() query: IFilterQuery) {
+    return this.postService.getPostBySearch(query);
   }
 
   @Get(':id')

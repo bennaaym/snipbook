@@ -2,6 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ICreatePostBody, IUpdatePostBody } from './interfaces/post.interface';
 
+export interface IFilterQuery {
+  tags: string;
+}
+
 export const basePostFields = {
   id: true,
   userId: true,
@@ -38,6 +42,24 @@ export class PostService {
       results: allPosts.length,
       data: {
         posts: allPosts,
+      },
+    };
+  }
+
+  async getPostBySearch({ tags }: IFilterQuery) {
+    const processedTags = tags.split(',');
+    const posts = await this.prismaService.post.findMany({
+      where: {
+        tags: {
+          hasSome: processedTags,
+        },
+      },
+    });
+
+    return {
+      status: 'success',
+      data: {
+        posts,
       },
     };
   }

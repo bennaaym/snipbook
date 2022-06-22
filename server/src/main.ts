@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import { ValidationPipe } from '@nestjs/common';
-import { CustomExceptionFilter } from './error/custom.exception';
 import { json } from 'express';
 import * as cookieParser from 'cookie-parser';
 import { UserInterceptor } from './auth/interceptors/user.interceptor';
