@@ -57,6 +57,7 @@ model Like {
 
 model Comment {
   id                      Int @id @default(autoincrement())
+  content                 String
   userId                  Int
   user                    User @relation(fields: [userId], references: [id])
   postId                  Int

@@ -31,6 +31,7 @@ export const basePostFields = {
     select: {
       id: true,
       userId: true,
+      content: true,
       createdAt: true,
     },
   },
@@ -204,7 +205,7 @@ export class PostService {
     };
   }
 
-  async createComment(id: number, userId: number, body: ICreateComment) {
+  async createComment(id: number, userId: number, { content }: ICreateComment) {
     // check if the post exist
     const post = await this.prismaService.post.findUnique({
       where: { id },
@@ -219,6 +220,7 @@ export class PostService {
     // create the comment
     await this.prismaService.comment.create({
       data: {
+        content,
         postId: id,
         userId,
       },
@@ -341,6 +343,20 @@ export class PostService {
       },
     });
 
+    // cascade delete all the likes related to the post
+    await this.prismaService.like.deleteMany({
+      where: {
+        postId: id,
+      },
+    });
+
+    // cascade delete all the comments related to the post
+    await this.prismaService.comment.deleteMany({
+      where: {
+        postId: id,
+      },
+    });
+
     // delete post
     await this.prismaService.post.delete({
       where: {
@@ -351,6 +367,53 @@ export class PostService {
     return {
       status: 'success',
       data: null,
+    };
+  }
+
+  async deleteCommentById(id: number, userId: number) {
+    // check if the comment exist
+    const comment = await this.prismaService.comment.findUnique({
+      where: { id },
+    });
+
+    if (!comment) {
+      throw new HttpException(
+        {
+          status: 'fail',
+          message: 'Invalid Comment Id',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // check if the user own the comment
+    if (comment?.userId !== userId) {
+      throw new HttpException(
+        {
+          status: 'fail',
+          message: 'Unauthorized User',
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    // delete comment
+    const postId = comment.postId;
+    await this.prismaService.comment.delete({ where: { id } });
+
+    //fetch the post after update
+    const post = await this.prismaService.post.findUnique({
+      select: {
+        ...basePostFields,
+      },
+      where: { id: postId },
+    });
+
+    return {
+      status: 'success',
+      data: {
+        post,
+      },
     };
   }
 }

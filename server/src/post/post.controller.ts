@@ -84,4 +84,13 @@ export class PostController {
   ) {
     return this.postService.deletePostById(id, userId);
   }
+
+  @Delete(':postId/comments/:commentId')
+  @UseGuards(AuthGuard)
+  deleteCommentById(
+    @Param('commentId', ParseIntPipe) id: number,
+    @User() { id: userId }: { id: number },
+  ) {
+    return this.postService.deleteCommentById(id, userId);
+  }
 }
