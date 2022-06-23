@@ -5,12 +5,16 @@ export interface IPostState {
   currentPage: number;
   numberOfPages: number;
   posts: IPost[];
+  post: IPost;
+  isLoading: boolean;
 }
 
 const initialState = {
   currentPage: 1,
   numberOfPages: 1,
   posts: [],
+  post: {} as IPost,
+  isLoading: true,
 };
 
 const reducer = (
@@ -20,6 +24,12 @@ const reducer = (
   switch (type) {
     case PostActionType.FETCH_ALL:
       return payload;
+
+    case PostActionType.FETCH_ONE:
+      return {
+        ...state,
+        post: payload,
+      };
 
     case PostActionType.CREATE:
       return {
@@ -43,7 +53,7 @@ const reducer = (
       );
       return {
         ...state,
-        posts: postsAfterDelete,
+        posts: [...postsAfterDelete],
       };
 
     case PostActionType.LIKE:
@@ -61,6 +71,18 @@ const reducer = (
       return {
         ...state,
         posts: payload,
+      };
+
+    case PostActionType.START_LOADING:
+      return {
+        ...state,
+        isLoading: true,
+      };
+
+    case PostActionType.END_LOADING:
+      return {
+        ...state,
+        isLoading: false,
       };
 
     default:

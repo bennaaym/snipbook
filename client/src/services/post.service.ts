@@ -23,6 +23,9 @@ class PostService {
         authorization: `Bearer ${accessToken}`,
       },
     });
+
+  getPostById = (id: number) => apiClient.get(`/post/${id}`);
+
   updatePost = (id: number, body: IUpdatePostBody, accessToken: string) =>
     apiClient.patch(`post/${id}`, body, {
       headers: {

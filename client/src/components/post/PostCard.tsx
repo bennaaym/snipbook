@@ -69,6 +69,8 @@ const PostCard: React.FC<IProps> = ({
     navigate(`/profile/${userId}`);
   };
 
+  const handleCardClick = () => navigate(`/posts/${id}`);
+
   return (
     <Card sx={{ width: 400 }}>
       <CardHeader
@@ -110,10 +112,12 @@ const PostCard: React.FC<IProps> = ({
         subheader={moment(updatedAt).fromNow()}
       />
       <CardMedia
+        onClick={handleCardClick}
         component="img"
         height="194"
         image={imgUrl ? imgUrl : postImage}
         alt="post_image"
+        style={{ cursor: "pointer" }}
       />
       <CardContent>
         <Typography variant="body2" color={customTheme.color.paragraph}>

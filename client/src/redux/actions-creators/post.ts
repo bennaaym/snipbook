@@ -8,13 +8,32 @@ export const getAllPosts = (page: number) => {
   return async (dispatch: Dispatch) => {
     try {
       const { data } = await PostService.getAllPosts(page);
-      console.log(data?.data);
+      dispatch({ type: PostActionType.START_LOADING });
       dispatch({
         type: PostActionType.FETCH_ALL,
         payload: data?.data,
       });
     } catch (err: any) {
       console.log(err);
+    } finally {
+      dispatch({ type: PostActionType.END_LOADING });
+    }
+  };
+};
+
+export const getPostById = (id: number) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      const { data } = await PostService.getPostById(id);
+      dispatch({ type: PostActionType.START_LOADING });
+      dispatch({
+        type: PostActionType.FETCH_ALL,
+        payload: data?.data,
+      });
+    } catch (err: any) {
+      console.log(err);
+    } finally {
+      dispatch({ type: PostActionType.END_LOADING });
     }
   };
 };
@@ -30,6 +49,7 @@ export const createPost = (
         getState().auth.data.accessToken
       );
 
+      dispatch({ type: PostActionType.START_LOADING });
       dispatch({
         type: PostActionType.CREATE,
         payload: data?.data?.post,
@@ -37,6 +57,8 @@ export const createPost = (
       navigate("/posts");
     } catch (err: any) {
       console.log(err.message);
+    } finally {
+      dispatch({ type: PostActionType.END_LOADING });
     }
   };
 };
@@ -99,6 +121,7 @@ export const getPostBySearch = (query: string, navigate: NavigateFunction) => {
   return async (dispatch: Dispatch, getState: CallableFunction) => {
     try {
       const { data } = await PostService.getPostBySearch(query);
+      dispatch({ type: PostActionType.START_LOADING });
       dispatch({
         type: PostActionType.SEARCH,
         payload: data?.data?.posts || [],
@@ -106,6 +129,8 @@ export const getPostBySearch = (query: string, navigate: NavigateFunction) => {
       navigate(`/posts/search?${query}`);
     } catch (err) {
       console.log(err);
+    } finally {
+      dispatch({ type: PostActionType.END_LOADING });
     }
   };
 };

@@ -10,7 +10,7 @@ import { usePosts } from "../hooks";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: "20px 0",
+    padding: "50px 0",
     display: "flex",
     alignItems: "center",
   },

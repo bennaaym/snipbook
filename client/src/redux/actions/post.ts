@@ -19,6 +19,11 @@ interface FetchAllAction {
   };
 }
 
+interface FetchOneAction {
+  type: PostActionType.FETCH_ONE;
+  payload: IPost;
+}
+
 interface CreateAction {
   type: PostActionType.CREATE;
   payload: IPost;
@@ -44,10 +49,17 @@ interface SearchAction {
   payload: IPost[];
 }
 
+interface LoadingAction {
+  type: PostActionType.START_LOADING | PostActionType.END_LOADING;
+  payload: null;
+}
+
 export type PostAction =
   | FetchAllAction
   | CreateAction
   | UpdateAction
   | DeleteAction
   | LikeAction
-  | SearchAction;
+  | SearchAction
+  | LoadingAction
+  | FetchOneAction;
