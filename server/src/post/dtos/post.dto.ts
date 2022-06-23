@@ -2,9 +2,7 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
-  IsPositive,
   IsString,
   MinLength,
   ValidateNested,
@@ -54,4 +52,10 @@ export class UpdatePostDto {
   @IsArray()
   @Type(() => String)
   tags: string[];
+}
+
+export class CreateCommentDto {
+  @IsString()
+  @IsNotEmpty()
+  content: string;
 }

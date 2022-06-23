@@ -12,7 +12,11 @@ import {
 } from '@nestjs/common';
 import { User } from 'src/auth/decorators/user.decorator';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { CreatePostDto, UpdatePostDto } from './dtos/post.dto';
+import {
+  CreateCommentDto,
+  CreatePostDto,
+  UpdatePostDto,
+} from './dtos/post.dto';
 import { IPagination, ISearchQuery, PostService } from './post.service';
 
 @Controller('post')
@@ -41,6 +45,16 @@ export class PostController {
     @User() { id: userId }: { id: number },
   ) {
     return this.postService.createPost(body, userId);
+  }
+
+  @Post(':id/comments')
+  @UseGuards(AuthGuard)
+  createComment(
+    @Param('id') id: number,
+    @User() { id: userId }: { id: number },
+    @Body() body: CreateCommentDto,
+  ) {
+    return this.postService.createComment(id, userId, body);
   }
 
   @Patch(':id')

@@ -21,6 +21,7 @@ model Post {
   updatedAt               DateTime  @default(now())
   userId                  Int
   user                    User  @relation(fields: [userId], references: [id])
+  comments                Comment[]
 }
 
 model User {
@@ -33,6 +34,7 @@ model User {
   refreshToken            String  @default("")
   likes                   Like[]
   posts                   Post[]
+  comments                Comment[]
 }
 
 model Image {
@@ -50,5 +52,14 @@ model Like {
   post                    Post @relation(fields: [postId], references: [id])
   userId                  Int
   user                    User @relation(fields: [userId], references: [id])
+  createdAt               DateTime @default(now())
+}
+
+model Comment {
+  id                      Int @id @default(autoincrement())
+  userId                  Int
+  user                    User @relation(fields: [userId], references: [id])
+  postId                  Int
+  post                    Post @relation(fields: [postId], references: [id])
   createdAt               DateTime @default(now())
 }

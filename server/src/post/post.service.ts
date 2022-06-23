@@ -1,6 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ICreatePostBody, IUpdatePostBody } from './interfaces/post.interface';
+import {
+  ICreateComment,
+  ICreatePostBody,
+  IUpdatePostBody,
+} from './interfaces/post.interface';
 
 export interface ISearchQuery {
   tags: string;
@@ -17,6 +21,13 @@ export const basePostFields = {
   description: true,
   tags: true,
   likes: {
+    select: {
+      id: true,
+      userId: true,
+      createdAt: true,
+    },
+  },
+  comments: {
     select: {
       id: true,
       userId: true,
@@ -183,6 +194,42 @@ export class PostService {
         tags: tags.length ? tags : post.tags,
         updatedAt: new Date(Date.now()),
       },
+    });
+
+    return {
+      status: 'success',
+      data: {
+        post: updatedPost,
+      },
+    };
+  }
+
+  async createComment(id: number, userId: number, body: ICreateComment) {
+    // check if the post exist
+    const post = await this.prismaService.post.findUnique({
+      where: { id },
+    });
+    if (!post) {
+      throw new HttpException(
+        { status: 'fail', message: 'Invalid Post ID' },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // create the comment
+    await this.prismaService.comment.create({
+      data: {
+        postId: id,
+        userId,
+      },
+    });
+
+    // get the updated post
+    const updatedPost = await this.prismaService.post.findUnique({
+      select: {
+        ...basePostFields,
+      },
+      where: { id },
     });
 
     return {

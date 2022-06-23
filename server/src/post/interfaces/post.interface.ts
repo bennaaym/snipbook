@@ -13,3 +13,7 @@ export interface IUpdatePostBody {
   description: string;
   tags: string[];
 }
+
+export interface ICreateComment {
+  content: string;
+}
