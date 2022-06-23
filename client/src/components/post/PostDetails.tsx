@@ -1,7 +1,7 @@
 import { Box, Chip, Divider, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import moment from "moment";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Dispatch } from "redux";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -11,6 +11,7 @@ import PageContainer from "../PageContainer";
 import Loading from "../Loading";
 import postImage from "../../static/images/post_image.jpg";
 import { customTheme } from "../../common";
+import PostCard from "./PostCard";
 
 const useStyles = makeStyles({
   post: {
@@ -45,16 +46,41 @@ const useStyles = makeStyles({
     height: "100%",
     borderRadius: customTheme.borderRadius.md,
   },
+
+  recommendationContainer: {
+    padding: "20px 0",
+  },
+
+  recommendedPosts: {
+    display: "flex",
+    flexWrap: "wrap",
+    columnGap: 20,
+  },
 });
 
 const PostDetails = () => {
   const classes = useStyles();
   const dispatch: Dispatch<any> = useDispatch();
-  const { post, isLoading } = usePosts();
+  const { posts, post, isLoading } = usePosts();
   const { id } = useParams();
   useEffect(() => {
     dispatch(PostActionCreators.getPostById(Number(id)));
   }, [dispatch, id]);
+
+  useEffect(() => {
+    if (!post?.tags?.length) return;
+    dispatch(
+      PostActionCreators.getPostBySearch(
+        `tags=${post.tags.join(",")}`,
+        () => {}
+      )
+    );
+  }, [post, dispatch]);
+
+  const recommendedPosts = useMemo(
+    () => posts?.filter(({ id }) => id !== post?.id),
+    [posts, post]
+  );
 
   if (isLoading) return <Loading />;
   if (!post) return <Loading />;
@@ -84,6 +110,37 @@ const PostDetails = () => {
           <img className={classes.img} src={postImage} alt={post.title} />
         </Box>
       </Box>
+
+      {recommendedPosts?.length && (
+        <Box className={classes.recommendationContainer}>
+          <Typography
+            variant="h5"
+            component="h1"
+            textTransform={"capitalize"}
+            mb={2}
+          >
+            Recommended Post
+          </Typography>
+          <Divider />
+          <Box className={classes.recommendedPosts}>
+            {recommendedPosts.map((post) => {
+              return (
+                <PostCard
+                  key={post.id}
+                  id={post.id}
+                  userId={post.userId}
+                  title={post.title}
+                  description={post.description}
+                  tags={post.tags}
+                  likes={post.likes}
+                  imgUrl={""}
+                  updatedAt={post.updatedAt}
+                />
+              );
+            })}
+          </Box>
+        </Box>
+      )}
     </PageContainer>
   );
 };

@@ -1,6 +1,7 @@
 import { PostActionType } from "../action-types";
 
 export interface IPost {
+  selectedFile: string;
   id: number;
   userId: number;
   title: string;
