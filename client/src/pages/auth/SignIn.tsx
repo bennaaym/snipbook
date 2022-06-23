@@ -115,7 +115,7 @@ const SignUp = () => {
           <Grid container justifyContent="flex-end" mt={2}>
             <Grid item>
               <Link to="/signup" color={customTheme.color.paragraph}>
-                Already have an account? Sign up
+                I don't have an account? Sign up
               </Link>
             </Grid>
           </Grid>

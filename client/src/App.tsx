@@ -17,8 +17,8 @@ const App = () => {
         <Route path="profile" element={<Profile />}>
           <Route path=":id" element={<ProfilePosts />} />
           <Route element={<ProtectedRoute />}>
-            <Route path=":id/post/create" element={<PostForm />} />
-            <Route path=":id/post/update/:id" element={<PostForm />} />
+            <Route path=":userId/post/create" element={<PostForm />} />
+            <Route path=":userId/post/update/:postId" element={<PostForm />} />
           </Route>
         </Route>
         <Route path="posts">

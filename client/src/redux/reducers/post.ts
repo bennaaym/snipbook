@@ -38,39 +38,47 @@ const reducer = (
       };
 
     case PostActionType.UPDATE:
-      const postsAfterUpdate = state.posts.filter(
-        (post: IPost) => post.id !== payload.id
-      );
-
       return {
         ...state,
-        posts: [payload, ...postsAfterUpdate],
+        posts: state.posts.map((post) =>
+          post.id === payload.id ? payload : post
+        ),
       };
 
     case PostActionType.DELETE:
-      const postsAfterDelete = state.posts.filter(
-        (post: IPost) => post.id !== payload.id
-      );
       return {
         ...state,
-        posts: [...postsAfterDelete],
+        posts: state.posts.filter((post: IPost) => post.id !== payload.id),
       };
 
     case PostActionType.LIKE:
-      const postIndex = state.posts.findIndex(
-        (post: IPost) => post.id === payload.id
-      );
-      state.posts[postIndex] = payload;
-
       return {
         ...state,
-        posts: [...state.posts],
+        posts: state.posts.map((post) =>
+          post.id === payload.id ? payload : post
+        ),
       };
 
     case PostActionType.SEARCH:
       return {
         ...state,
         posts: payload,
+      };
+
+    case PostActionType.CREATE_COMMENT:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post.id === payload.id ? payload : post
+        ),
+      };
+
+    case PostActionType.DELETE_COMMENT:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post.id === payload.id ? payload : post
+        ),
       };
 
     case PostActionType.START_LOADING:

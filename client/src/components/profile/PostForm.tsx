@@ -68,7 +68,7 @@ const PostForm = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [image, setImage] = useState<string>("");
   const { posts } = usePosts();
-  const { id } = useParams();
+  const { postId: id } = useParams();
 
   const post = useMemo(() => {
     return posts.find((post: any) => `${post.id}` === id);

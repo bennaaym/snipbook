@@ -17,14 +17,15 @@ export interface IUpdatePostBody {
 
 class PostService {
   getAllPosts = (page: number) => apiClient.get(`/post?page=${page}`);
+  getPostById = (id: number) => apiClient.get(`/post/${id}`);
+  getPostBySearch = (query: string) => apiClient.get(`/post/search?${query}`);
+
   createPost = (body: ICreatePostBody, accessToken: string) =>
     apiClient.post("post", body, {
       headers: {
         authorization: `Bearer ${accessToken}`,
       },
     });
-
-  getPostById = (id: number) => apiClient.get(`/post/${id}`);
 
   updatePost = (id: number, body: IUpdatePostBody, accessToken: string) =>
     apiClient.patch(`post/${id}`, body, {
@@ -51,7 +52,23 @@ class PostService {
       }
     );
 
-  getPostBySearch = (query: string) => apiClient.get(`/post/search?${query}`);
+  createComment = (id: number, content: string, accessToken: string) =>
+    apiClient.post(
+      `post/${id}/comments`,
+      { content },
+      {
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+  deleteComment = (id: number, postId: number, accessToken: string) =>
+    apiClient.delete(`post/${postId}/comments/${id}`, {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
 }
 
 export default new PostService();

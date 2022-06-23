@@ -1,4 +1,4 @@
-import { Box, Chip, Divider, Typography } from "@mui/material";
+import { Box, Chip, Divider, Stack, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import moment from "moment";
 import { useEffect, useMemo } from "react";
@@ -12,12 +12,12 @@ import Loading from "../Loading";
 import postImage from "../../static/images/post_image.jpg";
 import { customTheme } from "../../common";
 import PostCard from "./PostCard";
+import CommentSection from "./CommentSection";
 
 const useStyles = makeStyles({
   post: {
     display: "flex",
     justifyContent: "space-between",
-    padding: "20px 0",
     columnGap: 20,
   },
 
@@ -37,7 +37,6 @@ const useStyles = makeStyles({
 
   imgContainer: {
     flex: 1,
-    // width: "100%",
     height: "500px",
   },
   img: {
@@ -48,7 +47,7 @@ const useStyles = makeStyles({
   },
 
   recommendationContainer: {
-    padding: "20px 0",
+    // padding: "20px 0",
   },
 
   recommendedPosts: {
@@ -83,64 +82,72 @@ const PostDetails = () => {
   );
 
   if (isLoading) return <Loading />;
-  if (!post) return <Loading />;
+  if (!post) return <span>not found</span>;
   return (
     <PageContainer>
-      <Box className={classes.post}>
-        <Box className={classes.postDetails}>
-          <Typography variant="h3" component="h2" textTransform={"capitalize"}>
-            {post?.title}
-          </Typography>
-          {Boolean(post.tags.length) && (
-            <>
-              <Divider style={{ margin: "20px 0" }} />
-              <Box>
-                {post.tags.map((tag) => (
-                  <Chip key={tag} label={`#${tag}`} className={classes.tag} />
-                ))}
-              </Box>
-            </>
-          )}
-          <Divider style={{ margin: "20px 0" }} />
-          <Typography gutterBottom variant="body1" component="p">
-            {post.description}
-          </Typography>
-        </Box>
-        <Box className={classes.imgContainer}>
-          <img className={classes.img} src={postImage} alt={post.title} />
-        </Box>
-      </Box>
-
-      {recommendedPosts?.length && (
-        <Box className={classes.recommendationContainer}>
-          <Typography
-            variant="h5"
-            component="h1"
-            textTransform={"capitalize"}
-            mb={2}
-          >
-            Recommended Post
-          </Typography>
-          <Divider />
-          <Box className={classes.recommendedPosts}>
-            {recommendedPosts.map((post) => {
-              return (
-                <PostCard
-                  key={post.id}
-                  id={post.id}
-                  userId={post.userId}
-                  title={post.title}
-                  description={post.description}
-                  tags={post.tags}
-                  likes={post.likes}
-                  imgUrl={""}
-                  updatedAt={post.updatedAt}
-                />
-              );
-            })}
+      <Stack spacing={10}>
+        <Box className={classes.post}>
+          <Box className={classes.postDetails}>
+            <Typography
+              variant="h3"
+              component="h2"
+              textTransform={"capitalize"}
+            >
+              {post?.title}
+            </Typography>
+            {Boolean(post.tags.length) && (
+              <>
+                <Divider style={{ margin: "20px 0" }} />
+                <Box>
+                  {post?.tags.map((tag) => (
+                    <Chip key={tag} label={`#${tag}`} className={classes.tag} />
+                  ))}
+                </Box>
+              </>
+            )}
+            <Divider style={{ margin: "20px 0" }} />
+            <Typography gutterBottom variant="body1" component="p">
+              {post?.description}
+            </Typography>
+          </Box>
+          <Box className={classes.imgContainer}>
+            <img className={classes.img} src={postImage} alt={post.title} />
           </Box>
         </Box>
-      )}
+        <Box>
+          <CommentSection postId={Number(id)} comments={post?.comments} />
+        </Box>
+        {Boolean(recommendedPosts?.length) && (
+          <Box className={classes.recommendationContainer}>
+            <Typography
+              variant="h5"
+              component="h1"
+              textTransform={"capitalize"}
+              mb={2}
+            >
+              Recommended Post
+            </Typography>
+            <Divider />
+            <Box className={classes.recommendedPosts}>
+              {recommendedPosts.map((post) => {
+                return (
+                  <PostCard
+                    key={post.id}
+                    id={post.id}
+                    userId={post.userId}
+                    title={post.title}
+                    description={post.description}
+                    tags={post.tags}
+                    likes={post.likes}
+                    imgUrl={""}
+                    updatedAt={post.updatedAt}
+                  />
+                );
+              })}
+            </Box>
+          </Box>
+        )}
+      </Stack>
     </PageContainer>
   );
 };

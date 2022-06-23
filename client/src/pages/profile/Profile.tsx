@@ -3,7 +3,6 @@ import { Box } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { PageContainer, ProfileBar } from "../../components";
 import { Outlet, useParams } from "react-router-dom";
-import { useAuth } from "../../hooks";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 import { ProfileActionCreators } from "../../redux/actions-creators";
@@ -17,7 +16,6 @@ const useStyles = makeStyles({
 
 const Profile = () => {
   const classes = useStyles();
-  const { data: auth } = useAuth();
   const dispatch: Dispatch<any> = useDispatch();
   const { id } = useParams();
 

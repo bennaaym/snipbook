@@ -8,10 +8,10 @@ import homeIllustration from "../../static/images/home_page_illustration.png";
 
 const userStyles = makeStyles({
   root: {
-    height: "80%",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+    marginTop: 100,
   },
   home: {
     display: "flex",

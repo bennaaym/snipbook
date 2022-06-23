@@ -5,10 +5,12 @@ import { customTheme } from "../common";
 
 const useStyles = makeStyles({
   root: {
-    height: "100%",
+    minHeight: "100%",
+    // height: "100%",
     paddingLeft: `${customTheme.pagePadding}% !important`,
     paddingRight: `${customTheme.pagePadding}% !important`,
     paddingTop: customTheme.pagePadding * 5,
+    paddingBottom: customTheme.pagePadding * 5,
   },
 });
 

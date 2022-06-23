@@ -38,6 +38,24 @@ export const getPostById = (id: number) => {
   };
 };
 
+export const getPostBySearch = (query: string, navigate: NavigateFunction) => {
+  return async (dispatch: Dispatch, getState: CallableFunction) => {
+    try {
+      const { data } = await PostService.getPostBySearch(query);
+      dispatch({ type: PostActionType.START_LOADING });
+      dispatch({
+        type: PostActionType.SEARCH,
+        payload: data?.data?.posts || [],
+      });
+      navigate(`/posts/search?${query}`);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      dispatch({ type: PostActionType.END_LOADING });
+    }
+  };
+};
+
 export const createPost = (
   body: ICreatePostBody,
   navigate: NavigateFunction
@@ -117,20 +135,40 @@ export const likePost = (id: number) => {
   };
 };
 
-export const getPostBySearch = (query: string, navigate: NavigateFunction) => {
+export const createComment = (id: number, content: string) => {
   return async (dispatch: Dispatch, getState: CallableFunction) => {
     try {
-      const { data } = await PostService.getPostBySearch(query);
-      dispatch({ type: PostActionType.START_LOADING });
+      const { data } = await PostService.createComment(
+        id,
+        content,
+        getState().auth.data.accessToken
+      );
       dispatch({
-        type: PostActionType.SEARCH,
-        payload: data?.data?.posts || [],
+        type: PostActionType.CREATE_COMMENT,
+        payload: data?.data?.post,
       });
-      navigate(`/posts/search?${query}`);
+      return data?.data?.post?.comments;
     } catch (err) {
       console.log(err);
-    } finally {
-      dispatch({ type: PostActionType.END_LOADING });
+    }
+  };
+};
+
+export const deleteComment = (id: number, postId: number) => {
+  return async (dispatch: Dispatch, getState: CallableFunction) => {
+    try {
+      const { data } = await PostService.deleteComment(
+        id,
+        postId,
+        getState().auth.data.accessToken
+      );
+      dispatch({
+        type: PostActionType.DELETE_COMMENT,
+        payload: data?.data?.post,
+      });
+      return data?.data?.post?.comments;
+    } catch (err) {
+      console.log(err);
     }
   };
 };

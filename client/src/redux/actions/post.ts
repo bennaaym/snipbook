@@ -8,6 +8,7 @@ export interface IPost {
   description: string;
   tags: string[];
   likes: { id: number; userId: number; createdAt: Date }[];
+  comments: { id: number; content: string; userId: number; createdAt: Date }[];
   updatedAt: Date;
 }
 
@@ -50,6 +51,16 @@ interface SearchAction {
   payload: IPost[];
 }
 
+interface CreateCommentAction {
+  type: PostActionType.CREATE_COMMENT;
+  payload: IPost;
+}
+
+interface DeleteCommentAction {
+  type: PostActionType.DELETE_COMMENT;
+  payload: IPost;
+}
+
 interface LoadingAction {
   type: PostActionType.START_LOADING | PostActionType.END_LOADING;
   payload: null;
@@ -57,10 +68,12 @@ interface LoadingAction {
 
 export type PostAction =
   | FetchAllAction
+  | FetchOneAction
   | CreateAction
   | UpdateAction
   | DeleteAction
   | LikeAction
   | SearchAction
-  | LoadingAction
-  | FetchOneAction;
+  | CreateCommentAction
+  | DeleteCommentAction
+  | LoadingAction;
