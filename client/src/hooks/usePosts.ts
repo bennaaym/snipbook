@@ -1,8 +1,10 @@
 import { useSelector } from "react-redux";
-import { IPost } from "../redux/actions/post";
 import { RootState } from "../redux/reducers";
+import { IPostState } from "../redux/reducers/post";
 
-export const usePosts = (): IPost[] | [] => {
-  const posts = useSelector((state: RootState) => state.posts) as IPost[] | [];
-  return posts;
+export const usePosts = (): IPostState => {
+  const postState = useSelector(
+    (state: RootState) => state.posts
+  ) as IPostState;
+  return postState;
 };

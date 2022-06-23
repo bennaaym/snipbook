@@ -67,7 +67,7 @@ const PostForm = () => {
   const classes = useStyles();
   const [tags, setTags] = useState<string[]>([]);
   const [image, setImage] = useState<string>("");
-  const posts = usePosts();
+  const { posts } = usePosts();
   const { id } = useParams();
 
   const post = useMemo(() => {

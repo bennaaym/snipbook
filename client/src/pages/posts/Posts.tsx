@@ -25,11 +25,11 @@ const useStyles = makeStyles({
 const Posts = () => {
   const classes = useStyles();
   const auth = useAuth();
-  const posts = usePosts();
+  const { posts } = usePosts();
 
   const dispatch: Dispatch<any> = useDispatch();
   useEffect(() => {
-    dispatch(PostActionCreators.getAllPosts());
+    dispatch(PostActionCreators.getAllPosts(1));
   }, [auth, dispatch]);
   return (
     <Fragment>

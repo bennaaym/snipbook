@@ -12,7 +12,11 @@ export interface IPost {
 
 interface FetchAllAction {
   type: PostActionType.FETCH_ALL;
-  payload: IPost[];
+  payload: {
+    currentPage: number;
+    numberOfPages: number;
+    posts: IPost[];
+  };
 }
 
 interface CreateAction {

@@ -16,7 +16,7 @@ export interface IUpdatePostBody {
 }
 
 class PostService {
-  getAllPosts = () => apiClient.get("/post");
+  getAllPosts = (page: number) => apiClient.get(`/post?page=${page}`);
   createPost = (body: ICreatePostBody, accessToken: string) =>
     apiClient.post("post", body, {
       headers: {

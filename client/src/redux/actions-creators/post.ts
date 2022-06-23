@@ -4,13 +4,14 @@ import { PostService } from "../../services";
 import { ICreatePostBody, IUpdatePostBody } from "../../services/post.service";
 import { PostActionType } from "../action-types";
 
-export const getAllPosts = () => {
+export const getAllPosts = (page: number) => {
   return async (dispatch: Dispatch) => {
     try {
-      const { data } = await PostService.getAllPosts();
+      const { data } = await PostService.getAllPosts(page);
+      console.log(data?.data);
       dispatch({
         type: PostActionType.FETCH_ALL,
-        payload: data?.data?.posts || [],
+        payload: data?.data,
       });
     } catch (err: any) {
       console.log(err);

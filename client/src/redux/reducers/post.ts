@@ -1,37 +1,67 @@
-import { Console } from "console";
 import { PostActionType } from "../action-types";
 import { IPost, PostAction } from "../actions/post";
 
-const reducer = (state: IPost[] = [], { type, payload }: PostAction) => {
+export interface IPostState {
+  currentPage: number;
+  numberOfPages: number;
+  posts: IPost[];
+}
+
+const initialState = {
+  currentPage: 1,
+  numberOfPages: 1,
+  posts: [],
+};
+
+const reducer = (
+  state: IPostState = initialState,
+  { type, payload }: PostAction
+) => {
   switch (type) {
     case PostActionType.FETCH_ALL:
       return payload;
 
     case PostActionType.CREATE:
-      return [...state, payload];
+      return {
+        ...state,
+        posts: [payload, ...state.posts],
+      };
 
     case PostActionType.UPDATE:
-      const postsAfterUpdate = state.filter(
+      const postsAfterUpdate = state.posts.filter(
         (post: IPost) => post.id !== payload.id
       );
-      return [payload, ...postsAfterUpdate];
+
+      return {
+        ...state,
+        posts: [payload, ...postsAfterUpdate],
+      };
 
     case PostActionType.DELETE:
-      const postsAfterDelete = state.filter(
+      const postsAfterDelete = state.posts.filter(
         (post: IPost) => post.id !== payload.id
       );
-      return postsAfterDelete;
+      return {
+        ...state,
+        posts: postsAfterDelete,
+      };
 
     case PostActionType.LIKE:
-      const postIndex = state.findIndex(
+      const postIndex = state.posts.findIndex(
         (post: IPost) => post.id === payload.id
       );
-      state[postIndex] = payload;
+      state.posts[postIndex] = payload;
 
-      return [...state];
+      return {
+        ...state,
+        posts: [...state.posts],
+      };
 
     case PostActionType.SEARCH:
-      return payload;
+      return {
+        ...state,
+        posts: payload,
+      };
 
     default:
       return state;
