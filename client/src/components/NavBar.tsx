@@ -114,8 +114,8 @@ const Search = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   borderRadius: customTheme.borderRadius.xl,
-  backgroundColor: alpha(customTheme.color.paragraph, 0.5),
-  padding: "5px 0",
+  backgroundColor: customTheme.color.primary,
+  padding: "8px 0",
   "&:hover": {
     backgroundColor: alpha(customTheme.color.paragraph, 0.25),
   },
@@ -196,6 +196,11 @@ const NavBar = () => {
 
           <ul className={classes.items}>
             <li>
+              <Link to="/posts" className={classes.link}>
+                Posts
+              </Link>
+            </li>
+            <li>
               <Search>
                 <SearchIconWrapper>
                   <SearchIcon />
@@ -208,11 +213,6 @@ const NavBar = () => {
                   value={search}
                 />
               </Search>
-            </li>
-            <li>
-              <Link to="/posts" className={classes.link}>
-                Posts
-              </Link>
             </li>
             <li>
               {!auth?.accessToken ? (

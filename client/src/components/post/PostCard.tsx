@@ -72,7 +72,7 @@ const PostCard: React.FC<IProps> = ({
   const handleCardClick = () => navigate(`/posts/${id}`);
 
   return (
-    <Card sx={{ width: 400 }}>
+    <Card sx={{ width: 340 }}>
       <CardHeader
         avatar={
           <IconButton onClick={handleAvatarClick}>
