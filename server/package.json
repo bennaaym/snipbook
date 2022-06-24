@@ -33,6 +33,7 @@
     "@types/dotenv": "^8.2.0",
     "@types/helmet": "^4.0.0",
     "@types/jsonwebtoken": "^8.5.8",
+    "aws-sdk": "^2.1161.0",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
