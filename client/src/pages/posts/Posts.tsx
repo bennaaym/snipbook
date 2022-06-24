@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 import {
   CustomPagination,
-  Loading,
+  PostSkeleton,
   PageContainer,
   PostCard,
 } from "../../components";
@@ -31,7 +31,7 @@ const Posts = () => {
     dispatch(PostActionCreators.getAllPosts(1));
   }, [auth, dispatch]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <PostSkeleton />;
 
   if (!isLoading && !posts?.length)
     return (

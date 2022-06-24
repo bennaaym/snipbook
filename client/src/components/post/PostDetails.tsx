@@ -1,6 +1,5 @@
 import { Box, Chip, Divider, Stack, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import moment from "moment";
 import { useEffect, useMemo } from "react";
 import { Dispatch } from "redux";
 import { useDispatch } from "react-redux";
@@ -8,8 +7,7 @@ import { useParams } from "react-router-dom";
 import { usePosts } from "../../hooks";
 import { PostActionCreators } from "../../redux/actions-creators";
 import PageContainer from "../PageContainer";
-import Loading from "../Loading";
-import postImage from "../../static/images/post_image.jpg";
+import Loading from "../PostSkeleton";
 import { customTheme } from "../../common";
 import PostCard from "./PostCard";
 import CommentSection from "./CommentSection";

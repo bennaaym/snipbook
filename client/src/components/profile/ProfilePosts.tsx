@@ -5,19 +5,22 @@ import { IPost } from "../../redux/actions/post";
 import PostCard from "../post/PostCard";
 import { RootState } from "../../redux/reducers";
 import { makeStyles } from "@mui/styles";
+import { IProfileState } from "../../redux/reducers/profile";
 
 const useStyles = makeStyles({
   posts: {
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-between",
     rowGap: 10,
+    columnGap: 30,
   },
 });
 
 const ProfilePosts = () => {
-  const profile = useSelector((state: RootState) => state.profile);
+  const { profile } = useSelector(
+    (state: RootState) => state.profile
+  ) as IProfileState;
   const classes = useStyles();
 
   return (
@@ -33,7 +36,7 @@ const ProfilePosts = () => {
               description={post.description}
               tags={post.tags}
               likes={post.likes}
-              imgUrl={""}
+              imgUrl={post.images[0].url}
               updatedAt={post.updatedAt}
             />
           ))}

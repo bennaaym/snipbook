@@ -5,7 +5,7 @@ export { default as ProfileBar } from "./profile/ProfileBar";
 export { default as ProfilePosts } from "./profile/ProfilePosts";
 export { default as PostFrom } from "./profile/PostForm";
 export { default as PostCard } from "./post/PostCard";
-export { default as Loading } from "./Loading";
+export { default as PostSkeleton } from "./PostSkeleton";
 export { default as ErrorModal } from "./ErrorModal";
 export { default as CustomPagination } from "./CustomPagination";
 export { default as PostDetails } from "./post/PostDetails";

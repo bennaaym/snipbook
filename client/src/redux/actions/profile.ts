@@ -19,4 +19,9 @@ interface LikePostAction {
   payload: IPost;
 }
 
-export type ProfileAction = FetchProfileAction | LikePostAction;
+interface LoadingAction {
+  type: ProfileActionType.START_LOADING | ProfileActionType.END_LOADING;
+  payload: null;
+}
+
+export type ProfileAction = FetchProfileAction | LikePostAction | LoadingAction;

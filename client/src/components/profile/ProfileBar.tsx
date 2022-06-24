@@ -17,6 +17,8 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
 import { useAuth } from "../../hooks";
+import { IProfileState } from "../../redux/reducers/profile";
+import PostSkeleton from "../PostSkeleton";
 
 const DRAWER_WIDTH = 340;
 
@@ -70,7 +72,11 @@ const ProfileBar = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const { data: auth } = useAuth();
-  const profile = useSelector((state: RootState) => state.profile);
+  const { profile, isLoading } = useSelector(
+    (state: RootState) => state.profile
+  ) as IProfileState;
+
+  if (isLoading) return <PostSkeleton />;
 
   return (
     <Box>
@@ -102,7 +108,7 @@ const ProfileBar = () => {
                 fontWeight={700}
                 className={classes.userName}
               >
-                {profile.name}
+                {profile?.name}
               </Typography>
             </Stack>
           </Toolbar>
@@ -130,7 +136,7 @@ const ProfileBar = () => {
                 fontSize="medium"
                 sx={{ color: customTheme.color.paragraph }}
               />
-              <Typography>Likes {profile.totalLikes}</Typography>
+              <Typography>Likes {profile?.totalLikes}</Typography>
             </Box>
             <Box className={classes.stats}>
               <Visibility
@@ -143,20 +149,20 @@ const ProfileBar = () => {
 
           <Divider />
 
-          {profile.id === auth?.user?.id && (
+          {profile?.id === auth?.user?.id && (
             <List>
               <ProfileBarItem
                 label="new post"
                 icon={<AddBox sx={{ color: customTheme.color.paragraph }} />}
                 action={() => {
-                  navigate(`/profile/${auth?.user?.id}/post/create`);
+                  navigate(`/profile?/${auth?.user?.id}/post/create`);
                 }}
               />
               <ProfileBarItem
                 label="my posts"
                 icon={<Panorama sx={{ color: customTheme.color.paragraph }} />}
                 action={() => {
-                  navigate(`/profile/${auth?.user?.id}`);
+                  navigate(`/profile?/${auth?.user?.id}`);
                 }}
               />
             </List>
