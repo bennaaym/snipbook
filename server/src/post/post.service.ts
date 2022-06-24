@@ -72,7 +72,7 @@ export class PostService {
   }
 
   async getPostBySearch({ tags }: ISearchQuery) {
-    const processedTags = tags.split(',');
+    const processedTags = tags?.split(',') || [];
     const posts = await this.prismaService.post.findMany({
       select: {
         ...basePostFields,
