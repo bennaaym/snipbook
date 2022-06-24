@@ -54,7 +54,7 @@ const Posts = () => {
                 description={post.description}
                 tags={post.tags}
                 likes={post.likes}
-                imgUrl={post.images ? post.images[0]?.url : null}
+                imgUrl={post.images[0]?.url}
                 updatedAt={post.updatedAt}
               />
             );

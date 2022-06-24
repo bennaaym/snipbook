@@ -1,16 +1,17 @@
-import { Alert, Box, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Fragment, useMemo, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Tags from "./Tags";
 import { customTheme } from "../../common";
-import ImageBase from "./ImageBase";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 import { PostActionCreators } from "../../redux/actions-creators";
 import { useNavigate, useParams } from "react-router-dom";
 import { usePosts } from "../../hooks";
+import UploadFile from "../UploadFile";
+import useS3 from "../../hooks/useS3";
 
 const useStyles = makeStyles({
   root: {
@@ -65,8 +66,9 @@ const useStyles = makeStyles({
 
 const PostForm = () => {
   const classes = useStyles();
+  const [file, setFile] = useState<File | null>();
+  const [data, upload] = useS3() as any;
   const [tags, setTags] = useState<string[]>([]);
-  const [image, setImage] = useState<string>("");
   const { posts } = usePosts();
   const { postId: id } = useParams();
 
@@ -86,7 +88,7 @@ const PostForm = () => {
           {
             ...values,
             tags,
-            images: image ? [{ url: image }] : [],
+            images: data?.url ? [{ url: `${data?.url}` }] : [],
           },
           navigate
         )
@@ -98,7 +100,7 @@ const PostForm = () => {
           {
             ...values,
             tags,
-            images: image ? [{ url: image }] : [],
+            images: data ? [{ url: `${data?.url}` }] : [],
           },
           navigate
         )
@@ -122,9 +124,11 @@ const PostForm = () => {
         .min(10, "Description must be 10 characters or more")
         .required("Required"),
     }),
-    onSubmit: (values) => handleSubmit(values),
+    onSubmit: async (values) => {
+      await upload(file);
+      handleSubmit(values);
+    },
   });
-
   return (
     <Fragment>
       <Box className={classes.root}>
@@ -194,10 +198,9 @@ const PostForm = () => {
                 >
                   upload image
                 </Typography>
-                <ImageBase
-                  onDone={(base64: any) => {
-                    setImage(base64);
-                  }}
+                <UploadFile
+                  allowedExtensions={["png", "jpeg", "jpg"]}
+                  onChange={(file: any) => setFile(file)}
                 />
               </Stack>
             )}
@@ -206,12 +209,6 @@ const PostForm = () => {
               value="publish"
               className={classes.submitButton}
             />
-
-            {/* <Box mt={5}>
-              <Alert variant="filled" severity="error">
-                {}
-              </Alert> 
-                </Box>*/}
           </Stack>
         </form>
       </Box>

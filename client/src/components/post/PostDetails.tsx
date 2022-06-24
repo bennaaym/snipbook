@@ -111,7 +111,11 @@ const PostDetails = () => {
             </Typography>
           </Box>
           <Box className={classes.imgContainer}>
-            <img className={classes.img} src={postImage} alt={post.title} />
+            <img
+              className={classes.img}
+              src={post.images[0].url}
+              alt={post.title}
+            />
           </Box>
         </Box>
         <Box>
@@ -139,7 +143,7 @@ const PostDetails = () => {
                     description={post.description}
                     tags={post.tags}
                     likes={post.likes}
-                    imgUrl={""}
+                    imgUrl={post.images[0].url}
                     updatedAt={post.updatedAt}
                   />
                 );

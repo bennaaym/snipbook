@@ -74,7 +74,7 @@ export const createPost = (
       });
       navigate("/posts");
     } catch (err: any) {
-      console.log(err.message);
+      console.log(err);
     } finally {
       dispatch({ type: PostActionType.END_LOADING });
     }

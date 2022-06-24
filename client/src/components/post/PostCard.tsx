@@ -115,7 +115,7 @@ const PostCard: React.FC<IProps> = ({
         onClick={handleCardClick}
         component="img"
         height="194"
-        image={imgUrl ? imgUrl : postImage}
+        image={imgUrl}
         alt="post_image"
         style={{ cursor: "pointer" }}
       />

@@ -7,6 +7,10 @@ export interface IPost {
   title: string;
   description: string;
   tags: string[];
+  images: {
+    id: number;
+    url: string;
+  }[];
   likes: { id: number; userId: number; createdAt: Date }[];
   comments: { id: number; content: string; userId: number; createdAt: Date }[];
   updatedAt: Date;
