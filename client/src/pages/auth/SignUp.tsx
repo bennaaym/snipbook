@@ -232,7 +232,7 @@ const SignUp = () => {
             className={classes.submitButton}
           >
             {!loading ? (
-              "Sign in"
+              "Sign up"
             ) : (
               <CircularProgress
                 sx={{ color: customTheme.color.background }}

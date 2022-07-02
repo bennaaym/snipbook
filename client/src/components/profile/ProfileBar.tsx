@@ -155,14 +155,14 @@ const ProfileBar = () => {
                 label="new post"
                 icon={<AddBox sx={{ color: customTheme.color.paragraph }} />}
                 action={() => {
-                  navigate(`/profile?/${auth?.user?.id}/post/create`);
+                  navigate(`/profile/${auth?.user?.id}/post/create`);
                 }}
               />
               <ProfileBarItem
                 label="my posts"
                 icon={<Panorama sx={{ color: customTheme.color.paragraph }} />}
                 action={() => {
-                  navigate(`/profile?/${auth?.user?.id}`);
+                  navigate(`/profile/${auth?.user?.id}`);
                 }}
               />
             </List>
