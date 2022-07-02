@@ -35,6 +35,12 @@ export const basePostFields = {
       createdAt: true,
     },
   },
+  images: {
+    select: {
+      id: true,
+      url: true,
+    },
+  },
   updatedAt: true,
 };
 
