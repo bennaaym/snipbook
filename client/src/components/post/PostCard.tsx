@@ -14,7 +14,6 @@ import {
 import { Favorite, Share, MoreVert, Delete } from "@mui/icons-material";
 import { customTheme } from "../../common";
 import moment from "moment";
-import postImage from "../../static/images/post_image.jpg";
 import postAvatar from "../../static/images/user_avatar.jpg";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
